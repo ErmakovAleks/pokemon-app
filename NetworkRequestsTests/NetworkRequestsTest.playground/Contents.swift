@@ -7,7 +7,7 @@ request.httpMethod = "GET"
 let task = URLSession.shared.dataTask(with: request) { data, response, error in
     var namesArray: [String] = []
     if let data = data, let pokemons = try? JSONDecoder().decode(Pokemons.self, from: data), let results = pokemons.results {
-        for result in results {
+        results.forEach { result in
             namesArray.append(result.name!)
         }
     }
