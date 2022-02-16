@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import RxSwift
 
 // MARK: -
 // MARK: Public structures
@@ -40,8 +41,7 @@ public class Requester {
     // MARK: -
     // MARK: Public functions
     
-    public func getPokemonsNames(limit: Int = 20, completion: @escaping ([String]) -> ()) {
-        print("<!>Test3")
+    public func getPokemonsNames(limit: Int = 20) {
         var request = URLRequest(url: URL(string: "https://pokeapi.co/api/v2/pokemon/?limit=\(limit)")!)
         request.httpMethod = "GET"
         var names: [String] = []
@@ -51,12 +51,25 @@ public class Requester {
                     names.append(result.name!)
                 }
             }
-            self.didReceiveData?(names)
+            self.didReceiveData!(names)
         }
         task.resume()
     }
     
-    public func printTest() {
-        print("<!>Test")
+    public func getNamesWithRx(limit: Int = 20) -> Observable<String> {
+        return Observable<String>.create { observer in
+            var request = URLRequest(url: URL(string: "https://pokeapi.co/api/v2/pokemon/?limit=\(limit)")!)
+            request.httpMethod = "GET"
+            let task = URLSession.shared.dataTask(with: request) { data, response, error in
+                if let data = data, let pokemons = try? JSONDecoder().decode(Pokemons.self, from: data),
+                   let results = pokemons.results {
+                    results.forEach { result in
+                        observer.onNext(result.name!)
+                    }
+                }
+            }
+            task.resume()
+            return Disposables.create()
+        }
     }
 }
