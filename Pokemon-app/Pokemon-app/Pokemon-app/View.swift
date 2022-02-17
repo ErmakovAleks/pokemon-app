@@ -20,4 +20,12 @@ class View: UIView {
     override func awakeFromNib() {
         super.awakeFromNib()
     }
+    
+    func printList( _ listOfNames: [String]) -> () {
+        var allNamesString = ""
+        for name in listOfNames {
+            allNamesString += name + ", "
+        }
+        pokemonsNames?.text = allNamesString
+    }
 }

@@ -31,13 +31,8 @@ class ViewController: UIViewController {
     // MARK: Public functions
     
     public func printData(data: [String]) {
-        //print(data)
-        var allNamesString = ""
-        for name in data {
-            allNamesString += name + ", "
-        }
         DispatchQueue.main.async {
-            (self.view as? View)?.pokemonsNames?.text = allNamesString
+            (self.view as? View)?.printList(data)
         }
         
     }
