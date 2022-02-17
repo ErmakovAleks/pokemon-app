@@ -21,11 +21,18 @@ class View: UIView {
         super.awakeFromNib()
     }
     
-    func printList( _ listOfNames: [String]) -> () {
-        var allNamesString = ""
-        for name in listOfNames {
-            allNamesString += name + ", "
+    func printList( _ listOfNames: Result<[String], IncorrectResponseError, EmptyArrayError>) -> () {
+        switch listOfNames {
+        case .success(let names):
+            var allNamesString = ""
+            for name in names {
+                allNamesString += name + ", "
+            }
+            pokemonsNames?.text = allNamesString
+        case .failure(_):
+            print("Incorrect response from server")
+        case .empty(_):
+            print("There is no pokemons names")
         }
-        pokemonsNames?.text = allNamesString
     }
 }

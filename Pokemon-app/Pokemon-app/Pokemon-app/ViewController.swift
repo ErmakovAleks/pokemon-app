@@ -30,9 +30,10 @@ class ViewController: UIViewController {
     // MARK: -
     // MARK: Public functions
     
-    public func printData(data: [String]) {
+    public func printData(data: Result<[String], IncorrectResponseError, EmptyArrayError>) {
         DispatchQueue.main.async {
-            (self.view as? View)?.printList(data)
+            //(self.view as? View)?.printList(data)
+            self.View?.printList(data)
         }
         
     }
@@ -42,6 +43,6 @@ class ViewController: UIViewController {
         self.requester.didReceiveData = { [weak self] data in
             self?.printData(data: data)
         }
-        self.requester.getPokemonsNames(limit: 10)
+        self.requester.pokemonsNames(limit: 10)
     }
 }

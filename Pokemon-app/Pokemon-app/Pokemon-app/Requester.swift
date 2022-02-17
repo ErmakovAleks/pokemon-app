@@ -23,6 +23,20 @@ public struct Pokemon: Codable {
     public let url: String?
 }
 
+enum Result<Success, Failure, EmptyArray> {
+    case success(Success)
+    case failure(Failure)
+    case empty(EmptyArray)
+}
+
+enum EmptyArrayError: Error {
+    case emptyArray
+}
+
+enum IncorrectResponseError: Error {
+    case incorrectResponse
+}
+
 // MARK: -
 // MARK: Public class
 
@@ -31,7 +45,7 @@ public class Requester {
     // MARK: -
     // MARK: Public variables
     
-    public var didReceiveData: (([String]) -> ())?
+    var didReceiveData: ((Result<[String], IncorrectResponseError, EmptyArrayError>) -> ())?
     
     // MARK: -
     // MARK: Public initializations
@@ -41,22 +55,33 @@ public class Requester {
     // MARK: -
     // MARK: Public functions
     
-    public func getPokemonsNames(limit: Int = 20) {
-        var request = URLRequest(url: URL(string: "https://pokeapi.co/api/v2/pokemon/?limit=\(limit)")!)
-        request.httpMethod = "GET"
-        var names: [String] = []
-        let task = URLSession.shared.dataTask(with: request) { data, response, error in
-            if let data = data, let pokemons = try? JSONDecoder().decode(Pokemons.self, from: data), let results = pokemons.results {
-                results.forEach { result in
-                    names.append(result.name!)
+    public func pokemonsNames(limit: Int = 20) {
+        let url = URL(string: "https://pokeapi.co/api/v2/pokemon/?limit=\(limit)")
+        if let url = url {
+            var request = URLRequest(url: url)
+            request.httpMethod = "GET"
+            var names: [String] = []
+            let task = URLSession.shared.dataTask(with: request) { data, response, error in
+                if let data = data, let pokemons = try? JSONDecoder().decode(Pokemons.self, from: data), let results = pokemons.results {
+                    results.forEach { result in
+                        if let name = result.name {
+                            names.append(name)
+                        }
+                    }
+                }
+                if error != nil {
+                    self.didReceiveData?(.failure(IncorrectResponseError.incorrectResponse))
+                } else if names.isEmpty {
+                    self.didReceiveData?(.empty(EmptyArrayError.emptyArray))
+                } else {
+                    self.didReceiveData?(.success(names))
                 }
             }
-            self.didReceiveData!(names)
+            task.resume()
         }
-        task.resume()
     }
     
-    public func getNamesWithRx(limit: Int = 20) -> Observable<String> {
+    public func names(limit: Int = 20) -> Observable<String> {
         return Observable<String>.create { observer in
             var request = URLRequest(url: URL(string: "https://pokeapi.co/api/v2/pokemon/?limit=\(limit)")!)
             request.httpMethod = "GET"
