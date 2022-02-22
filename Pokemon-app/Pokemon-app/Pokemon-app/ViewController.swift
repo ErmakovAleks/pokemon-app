@@ -8,7 +8,23 @@
 import UIKit
 import RxSwift
 
-class ViewController: UIViewController {
+protocol RootViewGettable: UIViewController {
+    
+    associatedtype RootView: UIView
+    
+    var rootView: RootView? { get }
+}
+
+extension RootViewGettable {
+    
+    var rootView: RootView? {
+        self.view as? RootView
+    }
+}
+
+class ViewController: UIViewController, RootViewGettable {
+    
+    typealias RootView = View
     
     // MARK: -
     // MARK: Public variables
@@ -30,10 +46,9 @@ class ViewController: UIViewController {
     // MARK: -
     // MARK: Public functions
     
-    public func printData(data: Result<[String], IncorrectResponseError, EmptyArrayError>) {
+    public func printData(data: Result<[String], Error>) {
         DispatchQueue.main.async {
-            //(self.view as? View)?.printList(data)
-            self.View?.printList(data)
+            self.rootView?.printList(data)
         }
         
     }

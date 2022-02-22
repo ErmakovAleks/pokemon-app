@@ -23,16 +23,6 @@ public struct Pokemon: Codable {
     public let url: String?
 }
 
-enum Result<Success, Failure, EmptyArray> {
-    case success(Success)
-    case failure(Failure)
-    case empty(EmptyArray)
-}
-
-enum EmptyArrayError: Error {
-    case emptyArray
-}
-
 enum IncorrectResponseError: Error {
     case incorrectResponse
 }
@@ -45,7 +35,7 @@ public class Requester {
     // MARK: -
     // MARK: Public variables
     
-    var didReceiveData: ((Result<[String], IncorrectResponseError, EmptyArrayError>) -> ())?
+    var didReceiveData: ((Result<[String], Error>) -> ())?
     
     // MARK: -
     // MARK: Public initializations
@@ -71,8 +61,6 @@ public class Requester {
                 }
                 if error != nil {
                     self.didReceiveData?(.failure(IncorrectResponseError.incorrectResponse))
-                } else if names.isEmpty {
-                    self.didReceiveData?(.empty(EmptyArrayError.emptyArray))
                 } else {
                     self.didReceiveData?(.success(names))
                 }
