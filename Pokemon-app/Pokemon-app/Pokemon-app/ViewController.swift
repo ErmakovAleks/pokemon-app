@@ -22,7 +22,10 @@ extension RootViewGettable {
     }
 }
 
-class ViewController: UIViewController, RootViewGettable, UITableViewDelegate, UITableViewDataSource {
+class ViewController: UIViewController, RootViewGettable {
+    
+    // MARK: -
+    // MARK: Type inferences
     
     typealias RootView = View
     
@@ -30,6 +33,8 @@ class ViewController: UIViewController, RootViewGettable, UITableViewDelegate, U
     // MARK: Public variables
     
     let requester: Requester
+    var numberOfNames: ((Int) -> ())?
+    var arrayOfNames: (([String]) -> ())?
     
     // MARK: -
     // MARK: Initializators
@@ -49,25 +54,23 @@ class ViewController: UIViewController, RootViewGettable, UITableViewDelegate, U
     public func printData(data: Result<[String], Error>) {
         DispatchQueue.main.async {
             self.rootView?.printList(data)
+            switch data {
+            case .success(let names):
+                self.numberOfNames?(names.count)
+                self.arrayOfNames?(names)
+            case .failure(_):
+                print()
+            }
         }
         
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.rootView?.prepare(with: self)
         self.requester.didReceiveData = { [weak self] data in
             self?.printData(data: data)
         }
         self.requester.pokemonsNames(limit: 10)
-    }
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 10
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "CellIdentifier", for: indexPath)
-        cell.textLabel?.text = "<!>"
-        return cell
     }
 }

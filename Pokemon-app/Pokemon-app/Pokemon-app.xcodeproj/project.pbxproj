@@ -84,12 +84,12 @@
 			children = (
 				D99014E927AD230600BF4A96 /* AppDelegate.swift */,
 				D99014ED27AD230600BF4A96 /* ViewController.swift */,
+				D9672B0727BD39AF00C22518 /* View.swift */,
+				D99014FF27AD299000BF4A96 /* Requester.swift */,
 				D99014FD27AD26EC00BF4A96 /* ViewController.xib */,
 				D99014F227AD230700BF4A96 /* Assets.xcassets */,
 				D99014F427AD230700BF4A96 /* LaunchScreen.storyboard */,
 				D99014F727AD230700BF4A96 /* Info.plist */,
-				D99014FF27AD299000BF4A96 /* Requester.swift */,
-				D9672B0727BD39AF00C22518 /* View.swift */,
 			);
 			path = "Pokemon-app";
 			sourceTree = "<group>";

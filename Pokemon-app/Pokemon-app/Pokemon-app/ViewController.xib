@@ -18,12 +18,34 @@
         <view contentMode="scaleToFill" id="iN0-l3-epB" customClass="View" customModule="Pokemon_app" customModuleProvider="target">
             <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="s02-tg-ecz">
+                    <rect key="frame" x="0.0" y="44" width="414" height="818"/>
+                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    <connections>
+                        <outlet property="dataSource" destination="iN0-l3-epB" id="Xeq-Sa-Vxb"/>
+                        <outlet property="delegate" destination="iN0-l3-epB" id="zPj-X9-ljz"/>
+                    </connections>
+                </tableView>
+            </subviews>
             <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
             <color key="backgroundColor" systemColor="systemGrayColor"/>
+            <constraints>
+                <constraint firstItem="s02-tg-ecz" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="5Rq-Bl-w2u"/>
+                <constraint firstItem="s02-tg-ecz" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" id="N8L-Si-88b"/>
+                <constraint firstItem="s02-tg-ecz" firstAttribute="bottom" secondItem="vUN-kp-3ea" secondAttribute="bottom" id="aKg-9l-VE1"/>
+                <constraint firstItem="s02-tg-ecz" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="kmV-t7-LDc"/>
+            </constraints>
+            <connections>
+                <outlet property="tableView" destination="s02-tg-ecz" id="B54-ZO-3Gu"/>
+            </connections>
             <point key="canvasLocation" x="137.68115942028987" y="113.83928571428571"/>
         </view>
     </objects>
     <resources>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
         <systemColor name="systemGrayColor">
             <color red="0.55686274509803924" green="0.55686274509803924" blue="0.57647058823529407" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>

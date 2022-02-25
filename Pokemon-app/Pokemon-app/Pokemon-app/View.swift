@@ -7,42 +7,54 @@
 
 import UIKit
 
-class View: UIView {
+class View: UIView, UITableViewDelegate, UITableViewDataSource {
+    
+    // MARK: -
+    // MARK: IBOutlets
+    
+    @IBOutlet var tableView: UITableView?
     
     // MARK: -
     // MARK: Public variables
     
-    var pokemonsNames = UITableView()
     public var numberOfNames: Int?
-    public var namesArray = ["one", "two", "three"]
+    public var namesArray = [String]()
+    private weak var controller: ViewController?
     
     // MARK: -
     // MARK: Public functions
-    
-//    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-//        return namesArray.count
-//    }
-//
-//    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-//        let cell = pokemonsNames.dequeueReusableCell(withIdentifier: "CellIdentifier", for: indexPath)
-//        cell.textLabel?.text = namesArray[indexPath.row]
-//        return cell
-//    }
     
     override func awakeFromNib() {
         super.awakeFromNib()
     }
     
+    func prepare(with controller: ViewController) {
+        self.controller = controller
+    }
+    
     func printList( _ listOfNames: Result<[String], Error>) -> () {
-        self.pokemonsNames = UITableView(frame: CGRect(x: 0, y: 0, width: 100, height: 100), style: .plain)
-        self.pokemonsNames.delegate = window?.rootViewController
-        self.pokemonsNames.dataSource = window?.rootViewController
         
         switch listOfNames {
         case .success(let names):
             self.namesArray = names
+            print("<!> Data is received!")
+            self.tableView?.reloadData()
         case .failure(_):
             print("Incorrect response from server")
         }
     }
+    
+    // MARK: -
+    // MARK: UITableViewDelegate, UITableViewDataSource
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = UITableViewCell(style: .default, reuseIdentifier: nil)
+        cell.textLabel?.text = namesArray[indexPath.row]
+        return cell
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return namesArray.count
+    }
+    
 }
