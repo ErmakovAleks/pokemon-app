@@ -8,21 +8,7 @@
 import UIKit
 import RxSwift
 
-protocol RootViewGettable: UIViewController {
-    
-    associatedtype RootView: UIView
-    
-    var rootView: RootView? { get }
-}
-
-extension RootViewGettable {
-    
-    var rootView: RootView? {
-        self.view as? RootView
-    }
-}
-
-class ViewController: UIViewController, RootViewGettable {
+class PokemonsListController: UIViewController, RootViewGettable {
     
     // MARK: -
     // MARK: Type inferences
@@ -30,7 +16,7 @@ class ViewController: UIViewController, RootViewGettable {
     typealias RootView = View
     
     // MARK: -
-    // MARK: Public variables
+    // MARK: Variables
     
     let requester: Requester
     var numberOfNames: ((Int) -> ())?
@@ -51,26 +37,36 @@ class ViewController: UIViewController, RootViewGettable {
     // MARK: -
     // MARK: Public functions
     
-    public func printData(data: Result<[String], Error>) {
+    public func sendToPrint(data: [String]) {
         DispatchQueue.main.async {
-            self.rootView?.printList(data)
-            switch data {
-            case .success(let names):
-                self.numberOfNames?(names.count)
-                self.arrayOfNames?(names)
+            self.rootView?.print(data)
+        }
+    }
+    
+    func pokemonsNames() {
+        self.requester.pokemons(limit: 20) { response in
+            switch response {
+            case .success(let data):
+                var names = [String]()
+                for pokemonCard in data {
+                    if let name = pokemonCard.name {
+                        names.append(name)
+                    }
+                }
+                self.sendToPrint(data: names)
             case .failure(_):
-                print()
+                print("Incorrect response from server")
             }
         }
-        
     }
+    
+    // MARK: -
+    // MARK: ViewController Life Cycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         self.rootView?.prepare(with: self)
-        self.requester.didReceiveData = { [weak self] data in
-            self?.printData(data: data)
-        }
-        self.requester.pokemonsNames(limit: 10)
+        self.pokemonsNames()
     }
 }

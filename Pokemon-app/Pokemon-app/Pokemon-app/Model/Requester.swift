@@ -33,9 +33,10 @@ enum IncorrectResponseError: Error {
 public class Requester {
     
     // MARK: -
-    // MARK: Public variables
+    // MARK: Associated Types
     
-    var didReceiveData: ((Result<[String], Error>) -> ())?
+    typealias Completion<T> = (Result<T, Error>) -> ()
+    typealias PokemonsCardsCompletion = Completion<[Pokemon]>
     
     // MARK: -
     // MARK: Public initializations
@@ -45,24 +46,20 @@ public class Requester {
     // MARK: -
     // MARK: Public functions
     
-    public func pokemonsNames(limit: Int = 20) {
+    func pokemons(limit: Int = 20, completion: @escaping PokemonsCardsCompletion) {
         let url = URL(string: "https://pokeapi.co/api/v2/pokemon/?limit=\(limit)")
         if let url = url {
             var request = URLRequest(url: url)
             request.httpMethod = "GET"
-            var names: [String] = []
+            var pokemonsArray: [Pokemon] = []
             let task = URLSession.shared.dataTask(with: request) { data, response, error in
                 if let data = data, let pokemons = try? JSONDecoder().decode(Pokemons.self, from: data), let results = pokemons.results {
-                    results.forEach { result in
-                        if let name = result.name {
-                            names.append(name)
-                        }
-                    }
+                    pokemonsArray = results
                 }
-                if error != nil {
-                    self.didReceiveData?(.failure(IncorrectResponseError.incorrectResponse))
+                if let error = error {
+                    completion(.failure(error))
                 } else {
-                    self.didReceiveData?(.success(names))
+                    completion(.success(pokemonsArray))
                 }
             }
             task.resume()

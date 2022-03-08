@@ -17,9 +17,8 @@ class View: UIView, UITableViewDelegate, UITableViewDataSource {
     // MARK: -
     // MARK: Public variables
     
-    public var numberOfNames: Int?
     public var namesArray = [String]()
-    private weak var controller: ViewController?
+    private weak var controller: PokemonsListController?
     
     // MARK: -
     // MARK: Public functions
@@ -28,20 +27,13 @@ class View: UIView, UITableViewDelegate, UITableViewDataSource {
         super.awakeFromNib()
     }
     
-    func prepare(with controller: ViewController) {
+    func prepare(with controller: PokemonsListController) {
         self.controller = controller
     }
     
-    func printList( _ listOfNames: Result<[String], Error>) -> () {
-        
-        switch listOfNames {
-        case .success(let names):
-            self.namesArray = names
-            print("<!> Data is received!")
-            self.tableView?.reloadData()
-        case .failure(_):
-            print("Incorrect response from server")
-        }
+    func print( _ data: [String]) -> () {
+        self.namesArray = data
+        self.tableView?.reloadData()
     }
     
     // MARK: -
