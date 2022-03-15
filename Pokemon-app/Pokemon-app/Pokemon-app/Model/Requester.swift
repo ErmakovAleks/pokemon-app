@@ -19,8 +19,8 @@ public struct Pokemons: Codable {
 
 
 public struct Pokemon: Codable {
-    public let name: String?
-    public let url: String?
+    public let name: String
+    public let url: String
 }
 
 enum IncorrectResponseError: Error {
@@ -51,15 +51,12 @@ public class Requester {
         if let url = url {
             var request = URLRequest(url: url)
             request.httpMethod = "GET"
-            var pokemonsArray: [Pokemon] = []
             let task = URLSession.shared.dataTask(with: request) { data, response, error in
                 if let data = data, let pokemons = try? JSONDecoder().decode(Pokemons.self, from: data), let results = pokemons.results {
-                    pokemonsArray = results
+                    completion(.success(results))
                 }
                 if let error = error {
                     completion(.failure(error))
-                } else {
-                    completion(.success(pokemonsArray))
                 }
             }
             task.resume()
@@ -74,7 +71,7 @@ public class Requester {
                 if let data = data, let pokemons = try? JSONDecoder().decode(Pokemons.self, from: data),
                    let results = pokemons.results {
                     results.forEach { result in
-                        observer.onNext(result.name!)
+                        observer.onNext(result.name)
                     }
                 }
             }

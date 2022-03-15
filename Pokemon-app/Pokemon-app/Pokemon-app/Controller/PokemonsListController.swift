@@ -47,13 +47,7 @@ class PokemonsListController: UIViewController, RootViewGettable {
         self.requester.pokemons(limit: 20) { response in
             switch response {
             case .success(let data):
-                var names = [String]()
-                for pokemonCard in data {
-                    if let name = pokemonCard.name {
-                        names.append(name)
-                    }
-                }
-                self.sendToPrint(data: names)
+                self.sendToPrint(data: data.map { $0.name })
             case .failure(_):
                 print("Incorrect response from server")
             }

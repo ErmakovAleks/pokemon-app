@@ -10,6 +10,11 @@ import UIKit
 class View: UIView, UITableViewDelegate, UITableViewDataSource {
     
     // MARK: -
+    // MARK: Associated Types
+    
+    typealias commonType<T> = (T) -> ()
+    
+    // MARK: -
     // MARK: IBOutlets
     
     @IBOutlet var tableView: UITableView?
@@ -17,9 +22,8 @@ class View: UIView, UITableViewDelegate, UITableViewDataSource {
     // MARK: -
     // MARK: Public variables
     
-    var cell: UITableViewCell?
-    
     public var namesArray = [String]()
+    
     private weak var controller: PokemonsListController?
     
     // MARK: -
@@ -34,8 +38,7 @@ class View: UIView, UITableViewDelegate, UITableViewDataSource {
     }
     
     func print( _ data: [String]) -> () {
-        //self.namesArray = data
-        self.cell?.textLabel?.text = data[indexPath.row]
+        self.namesArray = data
         self.tableView?.reloadData()
     }
     
@@ -43,9 +46,9 @@ class View: UIView, UITableViewDelegate, UITableViewDataSource {
     // MARK: UITableViewDelegate, UITableViewDataSource
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        self.cell = UITableViewCell(style: .default, reuseIdentifier: nil)
-        //self.cell?.textLabel?.text = namesArray[indexPath.row]
-        return self.cell!
+        let cell = UITableViewCell(style: .default, reuseIdentifier: nil)
+        cell.textLabel?.text = namesArray[indexPath.row]
+        return cell
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
