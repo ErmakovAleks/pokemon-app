@@ -1,13 +1,6 @@
-//
-//  View.swift
-//  Pokemon-app
-//
-//  Created by Александр Ермаков on 16.02.2022.
-//
-
 import UIKit
 
-class View: UIView, UITableViewDelegate, UITableViewDataSource {
+class View: UIView {
     
     // MARK: -
     // MARK: Associated Types
@@ -20,10 +13,9 @@ class View: UIView, UITableViewDelegate, UITableViewDataSource {
     @IBOutlet var tableView: UITableView?
     
     // MARK: -
-    // MARK: Public variables
+    // MARK: Variables
     
-    public var namesArray = [String]()
-    
+    public var tableHandler = PokemonTableHandler()
     private weak var controller: PokemonsListController?
     
     // MARK: -
@@ -38,20 +30,7 @@ class View: UIView, UITableViewDelegate, UITableViewDataSource {
     }
     
     func print( _ data: [String]) -> () {
-        self.namesArray = data
+        self.tableHandler.names = data
         self.tableView?.reloadData()
-    }
-    
-    // MARK: -
-    // MARK: UITableViewDelegate, UITableViewDataSource
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = UITableViewCell(style: .default, reuseIdentifier: nil)
-        cell.textLabel?.text = namesArray[indexPath.row]
-        return cell
-    }
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return namesArray.count
     }
 }
