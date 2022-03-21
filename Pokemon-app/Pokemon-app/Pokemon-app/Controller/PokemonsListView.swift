@@ -1,6 +1,6 @@
 import UIKit
 
-class View: UIView {
+class PokemonsListView: UIView, UITableViewDelegate, UITableViewDataSource {
     
     // MARK: -
     // MARK: Associated Types
@@ -15,8 +15,8 @@ class View: UIView {
     // MARK: -
     // MARK: Variables
     
-    public var tableHandler = PokemonTableHandler()
     private weak var controller: PokemonsListController?
+    public var names = [String]()
     
     // MARK: -
     // MARK: Public functions
@@ -30,7 +30,20 @@ class View: UIView {
     }
     
     func print( _ data: [String]) -> () {
-        self.tableHandler.names = data
+        self.names = data
         self.tableView?.reloadData()
+    }
+    
+    // MARK: -
+    // MARK: UITableViewDelegate, UITableViewDataSource
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = UITableViewCell(style: .default, reuseIdentifier: nil)
+        cell.textLabel?.text = names[indexPath.row]
+        return cell
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return names.count
     }
 }

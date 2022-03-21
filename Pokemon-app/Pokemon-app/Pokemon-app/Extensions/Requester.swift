@@ -27,18 +27,18 @@ public class Requester {
     // MARK: -
     // MARK: Public functions
     
-    func pokemons(limit: Int = 20, completion: @escaping (Result<[Pokemon], Error>) -> ()) {
-        task(limit: limit, handler: completion)
+    func pokemons(limit: Int = 20, completion: @escaping PokemonsCardsCompletion) {
+        self.task(limit: limit, handler: completion)
     }
     
-    public func names(limit: Int = 20) -> Observable<String> {
-        return Observable<String>.create { observer in
+    public func names(limit: Int = 20) -> Observable<Result<[Pokemon], Error>> {
+        return Observable<Result<[Pokemon], Error>>.create { observer in
             self.task(limit: limit) { results in
                 switch results {
                 case .success(let pokemons):
-                    pokemons.map { observer.onNext($0.name) }
-                case .failure(_):
-                    return
+                    observer.onNext(.success(pokemons))
+                case .failure(let error):
+                    observer.onNext(.failure(error))
                 }
             }
             return Disposables.create()
