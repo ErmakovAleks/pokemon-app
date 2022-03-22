@@ -1,10 +1,3 @@
-//
-//  ViewController.swift
-//  Pokemon-app
-//
-//  Created by Александр Ермаков on 04.02.2022.
-//
-
 import UIKit
 import RxSwift
 
@@ -19,8 +12,6 @@ class PokemonsListController: UIViewController, RootViewGettable {
     // MARK: Variables
     
     let requester: Requester
-    var numberOfNames: ((Int) -> ())?
-    var arrayOfNames: (([String]) -> ())?
     
     // MARK: -
     // MARK: Initializators
