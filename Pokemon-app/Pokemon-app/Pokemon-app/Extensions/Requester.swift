@@ -13,11 +13,6 @@ public class Requester {
     typealias PokemonsCardsCompletion = Completion<[Pokemon]>
     
     // MARK: -
-    // MARK: Public initializations
-    
-    public init() {}
-    
-    // MARK: -
     // MARK: Public functions
     
     func pokemons(limit: Int = 20, completion: @escaping PokemonsCardsCompletion) {
