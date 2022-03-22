@@ -13,32 +13,20 @@ public class Requester {
     typealias PokemonsCardsCompletion = Completion<[Pokemon]>
     
     // MARK: -
-    // MARK: Public Enums
-    
-    enum UnexpectedError: Error {
-        case unexpectedError
-    }
-    
-    // MARK: -
-    // MARK: Public initializations
-    
-    public init() {}
-    
-    // MARK: -
     // MARK: Public functions
     
     func pokemons(limit: Int = 20, completion: @escaping PokemonsCardsCompletion) {
         self.task(limit: limit, handler: completion)
     }
-    
-    public func names(limit: Int = 20) -> Observable<Result<[Pokemon], Error>> {
-        return Observable<Result<[Pokemon], Error>>.create { observer in
+
+    public func names(limit: Int = 20) -> Single<[Pokemon]> {
+        return Single<[Pokemon]>.create { single in
             self.task(limit: limit) { results in
                 switch results {
                 case .success(let pokemons):
-                    observer.onNext(.success(pokemons))
+                    single(.success(pokemons))
                 case .failure(let error):
-                    observer.onNext(.failure(error))
+                    single(.failure(error))
                 }
             }
             return Disposables.create()
