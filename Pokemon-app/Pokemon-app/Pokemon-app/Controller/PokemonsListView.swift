@@ -10,11 +10,6 @@ import UIKit
 class View: UIView, UITableViewDelegate, UITableViewDataSource {
     
     // MARK: -
-    // MARK: Associated Types
-    
-    typealias commonType<T> = (T) -> ()
-    
-    // MARK: -
     // MARK: IBOutlets
     
     @IBOutlet var tableView: UITableView?

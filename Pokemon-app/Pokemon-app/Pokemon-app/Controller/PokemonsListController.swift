@@ -11,13 +11,13 @@ class PokemonsListController: UIViewController, RootViewGettable {
     // MARK: -
     // MARK: Variables
     
-    let requester: Requester
+    let provider: some DataProvider = Requester()
     
     // MARK: -
     // MARK: Initializators
     
-    init(requester: Requester){
-        self.requester = requester
+    init(provider: DataProvider){
+        self.provider = provider
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -35,7 +35,7 @@ class PokemonsListController: UIViewController, RootViewGettable {
     }
     
     func pokemonsNames() {
-        self.requester.pokemons(limit: 20) { response in
+        self.provider.data(count: 20) { response in
             switch response {
             case .success(let data):
                 self.sendToPrint(data: data.map { $0.name })

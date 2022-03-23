@@ -4,16 +4,21 @@ import RxSwift
 // MARK: -
 // MARK: Public class
 
-public class Requester {
+public class Requester<Pokemon>: DataProvider {
     
     // MARK: -
     // MARK: Associated Types
     
+    typealias Element = Pokemon
     typealias Completion<T> = (Result<T, Error>) -> ()
     typealias PokemonsCardsCompletion = Completion<[Pokemon]>
     
     // MARK: -
     // MARK: Public functions
+    
+    func data(count: Int, closure: @escaping (Result<Array<Pokemon>, Error>) -> ()) {
+        self.pokemons(limit: count, completion: closure)
+    }
     
     func pokemons(limit: Int = 20, completion: @escaping PokemonsCardsCompletion) {
         self.task(limit: limit, handler: completion)
