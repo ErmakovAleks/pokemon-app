@@ -9,7 +9,7 @@ public class URLSessionPokemonsRequester: PokemonsDataProvider {
     // MARK: -
     // MARK: Public functions
     
-    func data(count: Int, completion: @escaping (Result<Array<Pokemon>, Error>) -> ()) {
+    func data(count: Int, completion: @escaping PokemonsCardsCompletion) {
         self.pokemons(limit: count, completion: completion)
     }
     
