@@ -4,20 +4,13 @@ import RxSwift
 // MARK: -
 // MARK: Public class
 
-public class Requester<Pokemon>: DataProvider {
-    
-    // MARK: -
-    // MARK: Associated Types
-    
-    typealias Element = Pokemon
-    typealias Completion<T> = (Result<T, Error>) -> ()
-    typealias PokemonsCardsCompletion = Completion<[Pokemon]>
+public class URLSessionPokemonsRequester: PokemonsDataProvider {
     
     // MARK: -
     // MARK: Public functions
     
-    func data(count: Int, closure: @escaping (Result<Array<Pokemon>, Error>) -> ()) {
-        self.pokemons(limit: count, completion: closure)
+    func data(count: Int, completion: @escaping (Result<Array<Pokemon>, Error>) -> ()) {
+        self.pokemons(limit: count, completion: completion)
     }
     
     func pokemons(limit: Int = 20, completion: @escaping PokemonsCardsCompletion) {

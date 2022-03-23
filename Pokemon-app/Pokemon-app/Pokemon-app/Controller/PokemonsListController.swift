@@ -11,12 +11,13 @@ class PokemonsListController: UIViewController, RootViewGettable {
     // MARK: -
     // MARK: Variables
     
-    let provider: some DataProvider = Requester()
+    let provider: PokemonsDataProvider
+    var names = [String]()
     
     // MARK: -
     // MARK: Initializators
     
-    init(provider: DataProvider){
+    init(provider: PokemonsDataProvider){
         self.provider = provider
         super.init(nibName: nil, bundle: nil)
     }
@@ -30,7 +31,8 @@ class PokemonsListController: UIViewController, RootViewGettable {
     
     public func sendToPrint(data: [String]) {
         DispatchQueue.main.async {
-            self.rootView?.print(data)
+            self.names = data
+            self.rootView?.tableView?.reloadData()
         }
     }
     

@@ -1,8 +1,6 @@
 import Foundation
 
-protocol DataProvider {
+protocol PokemonsDataProvider {
     
-    associatedtype Element
-    
-    func data(count: Int, closure: @escaping (Result<Array<Element>, Error>) -> ())
+    func data(count: Int, completion: @escaping (Result<Array<Pokemon>, Error>) -> ())
 }
