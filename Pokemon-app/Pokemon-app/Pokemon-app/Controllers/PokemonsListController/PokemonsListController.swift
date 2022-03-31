@@ -1,17 +1,18 @@
 import UIKit
 import RxSwift
 
-class PokemonsListController: UIViewController, RootViewGettable {
+class PokemonsListController: UIViewController, RootViewGettable, Connectable {
     
     // MARK: -
     // MARK: Type inferences
     
-    typealias RootView = View
+    typealias RootView = PokemonsListView
     
     // MARK: -
     // MARK: Variables
     
     let provider: PokemonsDataProvider
+    weak var coordinator: AppCoordinator?
     var names = [String]()
     
     // MARK: -
@@ -37,7 +38,7 @@ class PokemonsListController: UIViewController, RootViewGettable {
     }
     
     func pokemonsNames() {
-        self.provider.data(count: 20) { response in
+        self.provider.data(count: 10) { response in
             switch response {
             case .success(let data):
                 self.sendToPrint(data: data.map { $0.name })
@@ -47,6 +48,11 @@ class PokemonsListController: UIViewController, RootViewGettable {
         }
     }
     
+    static func createObject() -> Self {
+        let requester = URLSessionPokemonsRequester()
+        return PokemonsListController(provider: requester) as! Self
+    }
+    
     // MARK: -
     // MARK: ViewController Life Cycle
     
@@ -54,6 +60,7 @@ class PokemonsListController: UIViewController, RootViewGettable {
         super.viewDidLoad()
         
         self.rootView?.prepare(with: self)
+        self.title = "List of Pokemons"
         self.pokemonsNames()
     }
 }
