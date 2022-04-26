@@ -9,12 +9,8 @@ public class URLSessionPokemonsRequester: PokemonsDataProvider {
     // MARK: -
     // MARK: Public functions
     
-    func data(count: Int, completion: @escaping PokemonsCardsCompletion) {
-        self.pokemons(limit: count, completion: completion)
-    }
-    
-    func pokemons(limit: Int = 20, completion: @escaping PokemonsCardsCompletion) {
-        self.task(limit: limit, handler: completion)
+    func list(count: Int, completion: @escaping PokemonsCardsCompletion) {
+        self.task(limit: count, handler: completion)
     }
     
     public func names(limit: Int = 20) -> Single<[Pokemon]> {
@@ -44,5 +40,24 @@ public class URLSessionPokemonsRequester: PokemonsDataProvider {
             }
         }
         task.resume()
+    }
+    
+    func pokemonImage(number: Int, handler: ((UIImage) -> ())) {
+//        var request = URLRequest(url: URL(string: "https://pokeapi.co/api/v2/pokemon/\(number)/")!)
+//        request.httpMethod = "GET"
+//        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+//            if let data = data, let image = try? JSONDecoder().decode(UIImage.self, from: data) {
+//                handler(.success(image))
+//            }
+//            if let error = error {
+//                handler(.failure(error))
+//            }
+//        }
+//        task.resume()
+        let imageURL = URL(string: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/\(number + 1).png")
+        print("URL is \(imageURL)")
+        guard let data = try? Data(contentsOf: imageURL!),
+              let image = UIImage(data: data) else { return }
+        handler(image)
     }
 }

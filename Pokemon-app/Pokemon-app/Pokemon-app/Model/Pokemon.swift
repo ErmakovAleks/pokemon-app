@@ -12,5 +12,5 @@ public struct Pokemons: Codable {
 
 public struct Pokemon: Codable {
     public let name: String
-    public let url: String
+    public let url: URL
 }

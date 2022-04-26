@@ -12,8 +12,8 @@ class PokemonsListController: UIViewController, RootViewGettable, Connectable {
     // MARK: Variables
     
     let provider: PokemonsDataProvider
-    weak var coordinator: AppCoordinator?
-    var names = [String]()
+    weak var coordinator: MainCoordinator?
+    var pokemons = [Pokemon]()
     
     // MARK: -
     // MARK: Initializators
@@ -30,27 +30,28 @@ class PokemonsListController: UIViewController, RootViewGettable, Connectable {
     // MARK: -
     // MARK: Public functions
     
-    public func sendToPrint(data: [String]) {
+    public func sendToPrint(data: [Pokemon]) {
         DispatchQueue.main.async {
-            self.names = data
+            self.pokemons = data
             self.rootView?.tableView?.reloadData()
         }
     }
     
     func pokemonsNames() {
-        self.provider.data(count: 10) { response in
+        self.provider.list(count: 10) { response in
             switch response {
             case .success(let data):
-                self.sendToPrint(data: data.map { $0.name })
+                self.sendToPrint(data: data)
             case .failure(_):
                 print("Incorrect response from server")
             }
         }
     }
     
-    static func createObject() -> Self {
-        let requester = URLSessionPokemonsRequester()
-        return PokemonsListController(provider: requester) as! Self
+    func showDetails(cellNumber: Int) {
+        let name = self.pokemons[cellNumber].name
+        self.coordinator?.openPokemonDetail(name: name, number: cellNumber)
+        print(self.pokemons[cellNumber].url)
     }
     
     // MARK: -

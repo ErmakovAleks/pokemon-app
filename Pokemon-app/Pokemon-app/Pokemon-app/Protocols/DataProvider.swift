@@ -1,6 +1,10 @@
 import Foundation
+import UIKit
 
 protocol PokemonsDataProvider {
     
-    func data(count: Int, completion: @escaping PokemonsCardsCompletion)
+    func list(count: Int, completion: @escaping PokemonsCardsCompletion)
+    
+    //temp
+    func pokemonImage(number: Int, handler: ((UIImage) -> ()))
 }
