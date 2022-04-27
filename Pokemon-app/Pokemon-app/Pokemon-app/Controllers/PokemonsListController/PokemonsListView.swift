@@ -20,7 +20,7 @@ class PokemonsListView: UIView, UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        self.controller?.showDetails(cellNumber: indexPath.row)
+        self.controller?.detailsURL(cellNumber: indexPath.row)
     }
     
     // MARK: -

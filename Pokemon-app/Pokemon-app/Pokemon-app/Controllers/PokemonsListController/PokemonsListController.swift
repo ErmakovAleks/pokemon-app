@@ -38,20 +38,19 @@ class PokemonsListController: UIViewController, RootViewGettable, Connectable {
     }
     
     func pokemonsNames() {
-        self.provider.list(count: 10) { response in
+        self.provider.list(count: 10) { [weak self] response in
             switch response {
             case .success(let data):
-                self.sendToPrint(data: data)
+                self?.sendToPrint(data: data)
             case .failure(_):
                 print("Incorrect response from server")
             }
         }
     }
     
-    func showDetails(cellNumber: Int) {
-        let name = self.pokemons[cellNumber].name
-        self.coordinator?.openPokemonDetail(name: name, number: cellNumber)
-        print(self.pokemons[cellNumber].url)
+    func detailsURL(cellNumber: Int) {
+        let detailsURL = self.pokemons[cellNumber].url
+        self.coordinator?.openPokemonDetail(url: detailsURL)
     }
     
     // MARK: -

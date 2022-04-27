@@ -1,5 +1,6 @@
 import Foundation
 import RxSwift
+import UIKit
 
 // MARK: -
 // MARK: Public class
@@ -27,6 +28,36 @@ public class URLSessionPokemonsRequester: PokemonsDataProvider {
         }
     }
     
+    func details(url: URL, completion: @escaping PokemonDetailCompletion) {
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+            if let data = data, let details = try? JSONDecoder().decode(PokemonDetails.self, from: data),
+               let name = details.name, let height = details.height, let weight = details.weight,
+               let imageURL = details.sprites?.front_default {
+                print("Name = \(name)")
+                print("Height = \(height)")
+                print("Weight = \(weight)")
+                var image: UIImage?
+                self.pokemonImage(url: imageURL) { pokemonImage in
+                    image = pokemonImage
+                }
+                if let image = image {
+                    let pokemonDetails = Detail(name: name, height: height, weight: weight, image: image)
+                    completion(.success(pokemonDetails))
+                    print("Success!")
+                }
+            }
+            if let error = error {
+                completion(.failure(error))
+            }
+        }
+        task.resume()
+    }
+    
+    // MARK: -
+    // MARK: Private functions
+    
     private func task(limit: Int, handler: @escaping PokemonsCardsCompletion) {
         var request = URLRequest(url: URL(string: "https://pokeapi.co/api/v2/pokemon/?limit=\(limit)")!)
         request.httpMethod = "GET"
@@ -42,21 +73,9 @@ public class URLSessionPokemonsRequester: PokemonsDataProvider {
         task.resume()
     }
     
-    func pokemonImage(number: Int, handler: ((UIImage) -> ())) {
-//        var request = URLRequest(url: URL(string: "https://pokeapi.co/api/v2/pokemon/\(number)/")!)
-//        request.httpMethod = "GET"
-//        let task = URLSession.shared.dataTask(with: request) { data, response, error in
-//            if let data = data, let image = try? JSONDecoder().decode(UIImage.self, from: data) {
-//                handler(.success(image))
-//            }
-//            if let error = error {
-//                handler(.failure(error))
-//            }
-//        }
-//        task.resume()
-        let imageURL = URL(string: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/\(number + 1).png")
-        print("URL is \(imageURL)")
-        guard let data = try? Data(contentsOf: imageURL!),
+    private func pokemonImage(url: URL, handler: ((UIImage) -> ())) {
+        let imageURL = url
+        guard let data = try? Data(contentsOf: imageURL),
               let image = UIImage(data: data) else { return }
         handler(image)
     }

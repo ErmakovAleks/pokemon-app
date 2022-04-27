@@ -10,11 +10,14 @@ class MainCoordinator: Coordinator {
     public var nameCompletion: ((String) -> ())?
     
     // MARK: -
-    // MARK: Initializators
+    // MARK: Initializator
     
     init(navigationController: UINavigationController) {
         self.navigationController = navigationController
     }
+    
+    // MARK: -
+    // MARK: Public functions
     
     func start() {
         let requester = URLSessionPokemonsRequester()
@@ -23,11 +26,11 @@ class MainCoordinator: Coordinator {
         self.navigationController.pushViewController(viewController, animated: true)
     }
     
-    func openPokemonDetail(name: String, number: Int) {
+    func openPokemonDetail(url: URL) {
         let requester = URLSessionPokemonsRequester()
         let pokemonDetail = PokemonDetailController(provider: requester)
         pokemonDetail.coordinator = self
-        pokemonDetail.showDetails(name: name, number: number)
+        pokemonDetail.showDetails(url: url)
         self.navigationController.pushViewController(pokemonDetail, animated: true)
     }
 }

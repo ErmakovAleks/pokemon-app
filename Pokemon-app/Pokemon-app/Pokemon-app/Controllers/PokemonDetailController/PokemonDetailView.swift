@@ -7,10 +7,12 @@ class PokemonDetailView: UIView {
     // MARK: IBOutlets
     
     @IBOutlet var pokemonNameLabel: UILabel?
+    @IBOutlet var pokemonHeightLabel: UILabel?
+    @IBOutlet var pokemonWeightLabel: UILabel?
     @IBOutlet var pokemonImage: UIImageView?
 
     // MARK: -
-    // MARK: Public variables
+    // MARK: Variables
     
     private weak var controller: PokemonDetailController?
     
