@@ -1,8 +1,13 @@
 import Foundation
 import UIKit
 
-class PokemonDetailView: UIView {
+class PokemonDetailView: UIView, ControllerPreparable {
     
+    // MARK: -
+    // MARK: Type Inferences
+    
+    typealias T = PokemonDetailController
+   
     // MARK: -
     // MARK: IBOutlets
     
@@ -10,16 +15,9 @@ class PokemonDetailView: UIView {
     @IBOutlet var pokemonHeightLabel: UILabel?
     @IBOutlet var pokemonWeightLabel: UILabel?
     @IBOutlet var pokemonImage: UIImageView?
-
-    // MARK: -
-    // MARK: Variables
-    
-    private weak var controller: PokemonDetailController?
     
     // MARK: -
-    // MARK: Public functions
+    // MARK: Public variables
     
-    func prepare(with controller: PokemonDetailController) {
-        self.controller = controller
-    }
+    var controller: PokemonDetailController?
 }

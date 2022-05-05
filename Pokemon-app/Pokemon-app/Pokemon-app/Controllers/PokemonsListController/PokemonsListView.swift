@@ -1,6 +1,11 @@
 import UIKit
 
-class PokemonsListView: UIView, UITableViewDelegate, UITableViewDataSource {
+class PokemonsListView: UIView, UITableViewDelegate, UITableViewDataSource, ControllerPreparable {
+
+    // MARK: -
+    // MARK: Type Inferences
+    
+    typealias T = PokemonsListController
     
     // MARK: -
     // MARK: IBOutlets
@@ -8,16 +13,12 @@ class PokemonsListView: UIView, UITableViewDelegate, UITableViewDataSource {
     @IBOutlet var tableView: UITableView?
     
     // MARK: -
-    // MARK: Variables
+    // MARK: Public variables
     
-    private weak var controller: PokemonsListController?
+    var controller: PokemonsListController?
     
     // MARK: -
     // MARK: Public functions
-    
-    func prepare(with controller: PokemonsListController) {
-        self.controller = controller
-    }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         self.controller?.detailsURL(cellNumber: indexPath.row)

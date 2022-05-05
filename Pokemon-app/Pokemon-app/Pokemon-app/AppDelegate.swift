@@ -13,16 +13,13 @@ import AVFoundation
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
-    var coordinator: MainCoordinator?
     let requester = URLSessionPokemonsRequester()
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         let window = UIWindow(frame: UIScreen.main.bounds)
-//        let pokemonsListController = PokemonsListController(provider: requester)
-//        let navigationController = UINavigationController(rootViewController: pokemonsListController)
-        let navigationController = UINavigationController()
-        self.coordinator = MainCoordinator(navigationController: navigationController)
-        self.coordinator?.start()
+        var navigationController = UINavigationController()
+        let coordinator = MainCoordinator(navigationController: navigationController)
+        navigationController.pushViewController(coordinator, animated: true)
         window.rootViewController = navigationController
         window.makeKeyAndVisible()
         self.window = window

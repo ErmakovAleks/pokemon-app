@@ -1,16 +1,11 @@
 import UIKit
 
-class PokemonDetailController: UIViewController, RootViewGettable, Connectable {
-    
-    // MARK: -
-    // MARK: Type inferences
-    
-    typealias RootView = PokemonDetailView
+class PokemonDetailController: BaseViewController<PokemonDetailView> {
     
     // MARK: -
     // MARK: Variables
     
-    weak var coordinator: MainCoordinator?
+    var pokemonDetailDelegate: PokemonDetailDelegate?
     private var name: String?
     private var height: Int?
     private var weight: Int?
@@ -32,7 +27,8 @@ class PokemonDetailController: UIViewController, RootViewGettable, Connectable {
     // MARK: -
     // MARK: Public functions
     
-    public func showDetails(url: URL) {
+    public func showDetails() {
+        guard let url = self.pokemonDetailDelegate?.detailURL else { return }
         self.provider.details(url: url) { [weak self] response in
             switch response {
             case .success(let details):
@@ -50,13 +46,15 @@ class PokemonDetailController: UIViewController, RootViewGettable, Connectable {
         self.name = details.name
         self.height = details.height
         self.weight = details.weight
+        self.image = details.image
         
-        if let name = self.name, let height = self.height,
-           let weight = self.weight {
-            self.rootView?.pokemonNameLabel?.text = name
-            self.rootView?.pokemonHeightLabel?.text = "Height: \(height) inches"
-            self.rootView?.pokemonWeightLabel?.text = "Weight: \(weight) gramms"
-            //self.rootView?.pokemonImage?.image = image
+        DispatchQueue.main.async {
+            self.rootView?.pokemonNameLabel?.text = self.name
+            if let height = self.height, let weight = self.weight {
+                self.rootView?.pokemonHeightLabel?.text = "Height: \(height) inches"
+                self.rootView?.pokemonWeightLabel?.text = "Weight: \(weight) gramms"
+            }
+            self.rootView?.pokemonImage?.image = self.image
         }
     }
     
@@ -66,6 +64,6 @@ class PokemonDetailController: UIViewController, RootViewGettable, Connectable {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.rootView?.prepare(with: self)
+        self.showDetails()
     }
 }

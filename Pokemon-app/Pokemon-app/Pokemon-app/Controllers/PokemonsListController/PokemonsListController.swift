@@ -1,18 +1,13 @@
 import UIKit
 import RxSwift
 
-class PokemonsListController: UIViewController, RootViewGettable, Connectable {
-    
-    // MARK: -
-    // MARK: Type inferences
-    
-    typealias RootView = PokemonsListView
+class PokemonsListController: BaseViewController<PokemonsListView> {
     
     // MARK: -
     // MARK: Variables
     
     let provider: PokemonsDataProvider
-    weak var coordinator: MainCoordinator?
+    weak var pokemonsListDelegate: PokemonsListDelegate?
     var pokemons = [Pokemon]()
     
     // MARK: -
@@ -50,7 +45,7 @@ class PokemonsListController: UIViewController, RootViewGettable, Connectable {
     
     func detailsURL(cellNumber: Int) {
         let detailsURL = self.pokemons[cellNumber].url
-        self.coordinator?.openPokemonDetail(url: detailsURL)
+        self.pokemonsListDelegate?.didSelect(pokemon: detailsURL)
     }
     
     // MARK: -
@@ -59,7 +54,6 @@ class PokemonsListController: UIViewController, RootViewGettable, Connectable {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.rootView?.prepare(with: self)
         self.title = "List of Pokemons"
         self.pokemonsNames()
     }
