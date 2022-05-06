@@ -1,7 +1,7 @@
 import Foundation
 import UIKit
 
-class MainCoordinator: UIViewController, Coordinator, PokemonsListDelegate, PokemonDetailDelegate {
+class MainCoordinator: UINavigationController, Coordinator, PokemonsListDelegate, PokemonDetailDelegate {
     
     // MARK: -
     // MARK: Public variables
@@ -9,18 +9,6 @@ class MainCoordinator: UIViewController, Coordinator, PokemonsListDelegate, Poke
     weak var navController: UINavigationController?
     var detailURL: URL?
     let requester = URLSessionPokemonsRequester()
-    
-    // MARK: -
-    // MARK: Initializator
-    
-    init(navigationController: UINavigationController) {
-        self.navController = navigationController
-        super.init(nibName: nil, bundle: nil)
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
     
     // MARK: -
     // MARK: Public functions
@@ -34,13 +22,13 @@ class MainCoordinator: UIViewController, Coordinator, PokemonsListDelegate, Poke
     private func start() {
         let viewController = PokemonsListController(provider: self.requester)
         viewController.pokemonsListDelegate = self
-        self.navController?.pushViewController(viewController, animated: true)
+        pushViewController(viewController, animated: true)
     }
     
     func openPokemonDetail(url: URL) {
         let pokemonDetail = PokemonDetailController(provider: self.requester)
         pokemonDetail.pokemonDetailDelegate = self
-        self.navController?.pushViewController(pokemonDetail, animated: true)
+        pushViewController(pokemonDetail, animated: true)
     }
     
     // MARK: -
