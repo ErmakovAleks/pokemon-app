@@ -1,6 +1,6 @@
 import UIKit
 
-class PokemonsListView: UIView, UITableViewDelegate, UITableViewDataSource, ControllerPreparable {
+class PokemonsListView: UIView, UITableViewDelegate, UITableViewDataSource, BaseView {
 
     // MARK: -
     // MARK: Type Inferences
@@ -21,7 +21,7 @@ class PokemonsListView: UIView, UITableViewDelegate, UITableViewDataSource, Cont
     // MARK: Public functions
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        self.controller?.detailsURL(cellNumber: indexPath.row)
+        self.controller?.processPokemon(cellNumber: indexPath.row)
     }
     
     // MARK: -

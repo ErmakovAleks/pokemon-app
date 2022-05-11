@@ -34,10 +34,7 @@ public class URLSessionPokemonsRequester: PokemonsDataProvider {
         let task = URLSession.shared.dataTask(with: request) { data, response, error in
             if let data = data, let details = try? JSONDecoder().decode(PokemonDetails.self, from: data),
                let name = details.name, let height = details.height, let weight = details.weight,
-               let imageURL = details.sprites?.front_default {
-                print("Name = \(name)")
-                print("Height = \(height)")
-                print("Weight = \(weight)")
+               let imageURL = details.sprites?.frontDefault {
                 var image: UIImage?
                 self.pokemonImage(url: imageURL) { pokemonImage in
                     image = pokemonImage
@@ -45,7 +42,6 @@ public class URLSessionPokemonsRequester: PokemonsDataProvider {
                 if let image = image {
                     let pokemonDetails = Detail(name: name, height: height, weight: weight, image: image)
                     completion(.success(pokemonDetails))
-                    print("Success!")
                 }
             }
             if let error = error {

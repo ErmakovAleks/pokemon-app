@@ -33,7 +33,7 @@ class PokemonsListController: BaseViewController<PokemonsListView> {
     }
     
     func pokemonsNames() {
-        self.provider.list(count: 10) { [weak self] response in
+        self.provider.list(count: 20) { [weak self] response in
             switch response {
             case .success(let data):
                 self?.sendToPrint(data: data)
@@ -43,9 +43,10 @@ class PokemonsListController: BaseViewController<PokemonsListView> {
         }
     }
     
-    func detailsURL(cellNumber: Int) {
+    func processPokemon(cellNumber: Int) {
         let detailsURL = self.pokemons[cellNumber].url
-        self.pokemonsListDelegate?.didSelect(pokemon: detailsURL)
+        //self.pokemonsListDelegate?.didSelect(pokemon: detailsURL)
+        self.events.onNext(.showDetails(url: detailsURL))
     }
     
     // MARK: -

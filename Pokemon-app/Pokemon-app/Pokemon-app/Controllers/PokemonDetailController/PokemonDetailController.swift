@@ -5,17 +5,19 @@ class PokemonDetailController: BaseViewController<PokemonDetailView> {
     // MARK: -
     // MARK: Variables
     
-    var pokemonDetailDelegate: PokemonDetailDelegate?
     private var name: String?
     private var height: Int?
     private var weight: Int?
     private var image: UIImage?
-    let provider: PokemonsDataProvider
+    
+    private let url: URL?
+    private let provider: PokemonsDataProvider
     
     // MARK: -
     // MARK: Initializators
     
-    init(provider: PokemonsDataProvider){
+    init(provider: PokemonsDataProvider, url: URL?){
+        self.url = url
         self.provider = provider
         super.init(nibName: nil, bundle: nil)
     }
@@ -28,7 +30,7 @@ class PokemonDetailController: BaseViewController<PokemonDetailView> {
     // MARK: Public functions
     
     public func showDetails() {
-        guard let url = self.pokemonDetailDelegate?.detailURL else { return }
+        guard let url = self.url else { return }
         self.provider.details(url: url) { [weak self] response in
             switch response {
             case .success(let details):

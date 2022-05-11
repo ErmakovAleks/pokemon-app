@@ -1,7 +1,7 @@
 import Foundation
 import UIKit
 
-class PokemonDetailView: UIView, ControllerPreparable {
+class PokemonDetailView: UIView, BaseView {
     
     // MARK: -
     // MARK: Type Inferences

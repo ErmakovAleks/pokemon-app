@@ -1,14 +1,14 @@
 import Foundation
 import UIKit
 
-protocol ControllerPreparable: UIView {
+protocol BaseView: UIView {
     
-    associatedtype T: UIViewController
+    associatedtype T
     
     var controller: T? { get set }
 }
 
-extension ControllerPreparable {
+extension BaseView {
     
     func prepare(with controller: UIViewController) {
         self.controller = controller as? Self.T

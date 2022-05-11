@@ -13,8 +13,15 @@ struct PokemonDetails: Codable {
 // MARK: Sprites
 
 struct Sprites: Codable {
-    let back_default: URL
-    let back_shiny: URL
-    let front_default: URL
-    let front_shiny: URL
+    let backDefault: URL
+    let backShiny: URL
+    let frontDefault: URL
+    let frontShiny: URL
+    
+    enum CodingKeys: String, CodingKey {
+        case backDefault = "back_default"
+        case backShiny = "back_shiny"
+        case frontDefault = "front_default"
+        case frontShiny = "front_shiny"
+    }
 }

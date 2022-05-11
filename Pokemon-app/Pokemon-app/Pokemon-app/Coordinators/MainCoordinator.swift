@@ -1,44 +1,41 @@
 import Foundation
 import UIKit
 
-class MainCoordinator: UINavigationController, Coordinator, PokemonsListDelegate, PokemonDetailDelegate {
+class MainCoordinator: BaseCoordinator, PokemonsListDelegate {
     
     // MARK: -
     // MARK: Public variables
     
-    weak var navController: UINavigationController?
-    var detailURL: URL?
     let requester = URLSessionPokemonsRequester()
     
     // MARK: -
-    // MARK: Public functions
+    // MARK: BaseCoordinator functions
     
-    func didSelect(pokemon: URL) {
-        self.detailURL = pokemon
-        self.openPokemonDetail(url: pokemon)
-        print("didSelect!")
-    }
-    
-    private func start() {
+    override func start() {
         let viewController = PokemonsListController(provider: self.requester)
-        viewController.pokemonsListDelegate = self
-        pushViewController(viewController, animated: true)
-    }
-    
-    func openPokemonDetail(url: URL) {
-        let pokemonDetail = PokemonDetailController(provider: self.requester)
-        pokemonDetail.pokemonDetailDelegate = self
-        pushViewController(pokemonDetail, animated: true)
+        viewController.events.subscribe(
+            onNext: {
+                switch $0 {
+                case .showDetails(url: let url):
+                    self.didSelect(pokemon: url)
+                }
+            }
+        ).disposed(by: viewController.disposeBag)
+        self.pushViewController(viewController, animated: true)
     }
     
     // MARK: -
-    // MARK: ViewController Life Cycle
+    // MARK: Private functions
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        self.view.backgroundColor = .orange
-        
-        start()
+    private func openPokemonDetail(pokemon: URL) {
+        let pokemonDetail = PokemonDetailController(provider: self.requester, url: pokemon)
+        self.pushViewController(pokemonDetail, animated: true)
+    }
+    
+    // MARK: -
+    // MARK: PokemonsListDelegate
+    
+    func didSelect(pokemon: URL) {
+        self.openPokemonDetail(pokemon: pokemon)
     }
 }
