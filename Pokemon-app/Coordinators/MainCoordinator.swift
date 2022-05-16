@@ -13,14 +13,13 @@ class MainCoordinator: BaseCoordinator, PokemonsListDelegate {
     
     override func start() {
         let viewController = PokemonsListController(provider: self.requester)
-        viewController.events.subscribe(
-            onNext: {
-                switch $0 {
-                case .showDetails(url: let url):
-                    self.didSelect(pokemon: url)
-                }
+        viewController.events.bind {
+            switch $0 {
+            case .showDetails(url: let url):
+                self.didSelect(pokemon: url)
             }
-        ).disposed(by: viewController.disposeBag)
+        }
+        .disposed(by: viewController.disposeBag)
         self.pushViewController(viewController, animated: true)
     }
     

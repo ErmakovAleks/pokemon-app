@@ -3,11 +3,17 @@ import UIKit
 
 class BaseCoordinator: UINavigationController {
     
-    func start() {}
+    // MARK: -
+    // MARK: View Life Cycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         self.start()
     }
+    
+    // MARK: -
+    // MARK: Overriding
+    
+    func start() {}
 }

@@ -4,6 +4,7 @@ import Foundation
 // MARK: PokemonDetails
 
 struct PokemonDetails: Codable {
+    
     let height: Int?
     let name: String?
     let sprites: Sprites?
@@ -13,10 +14,6 @@ struct PokemonDetails: Codable {
 // MARK: Sprites
 
 struct Sprites: Codable {
-    let backDefault: URL
-    let backShiny: URL
-    let frontDefault: URL
-    let frontShiny: URL
     
     enum CodingKeys: String, CodingKey {
         case backDefault = "back_default"
@@ -24,4 +21,9 @@ struct Sprites: Codable {
         case frontDefault = "front_default"
         case frontShiny = "front_shiny"
     }
+    
+    let backDefault: URL
+    let backShiny: URL
+    let frontDefault: URL
+    let frontShiny: URL
 }

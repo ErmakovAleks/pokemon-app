@@ -3,14 +3,8 @@ import UIKit
 import RxSwift
 import RxCocoa
 
-// MARK: -
-// MARK: Events Enumeration
 
-public enum PokemonsEvents {
-    case showDetails(url: URL)
-}
-
-class BaseViewController<ViewType: BaseView>: UIViewController, RootViewGettable {
+class BaseViewController<ViewType: BaseView, OutputEvents>: UIViewController, RootViewGettable {
     
     // MARK: -
     // MARK: Type Inferences
@@ -20,7 +14,7 @@ class BaseViewController<ViewType: BaseView>: UIViewController, RootViewGettable
     // MARK: -
     // MARK: Public variables
     
-    public let events = PublishSubject<PokemonsEvents>()
+    public let events = PublishRelay<OutputEvents>()
     public let disposeBag = DisposeBag()
     
     // MARK: -

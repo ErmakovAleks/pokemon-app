@@ -1,6 +1,6 @@
 import UIKit
 
-class PokemonDetailController: BaseViewController<PokemonDetailView> {
+class PokemonDetailController: BaseViewController<PokemonDetailView, PokemonsEvents> {
     
     // MARK: -
     // MARK: Variables
@@ -31,13 +31,18 @@ class PokemonDetailController: BaseViewController<PokemonDetailView> {
     
     public func showDetails() {
         guard let url = self.url else { return }
-        self.provider.details(url: url) { [weak self] response in
-            switch response {
-            case .success(let details):
-                self?.refresh(details: details)
-            case .failure(_):
-                print("Incorrect response from server")
-            }
+//        self.provider.details(url: url) { [weak self] response in
+//            switch response {
+//            case .success(let details):
+//                self?.refresh(details: details)
+//            case .failure(_):
+//                print("Incorrect response from server")
+//            }
+//        }
+        let details = self.provider.rxDetails(url: url).subscribe { details in
+            self.refresh(details: details)
+        } onFailure: { _ in
+            print("Incorrect response from server")
         }
     }
     

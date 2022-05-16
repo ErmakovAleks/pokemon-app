@@ -1,7 +1,15 @@
 import UIKit
 import RxSwift
+import UIScrollView_InfiniteScroll
 
-class PokemonsListController: BaseViewController<PokemonsListView> {
+// MARK: -
+// MARK: Events Enumeration
+
+public enum PokemonsEvents {
+    case showDetails(url: URL)
+}
+
+class PokemonsListController: BaseViewController<PokemonsListView, PokemonsEvents> {
     
     // MARK: -
     // MARK: Variables
@@ -9,6 +17,8 @@ class PokemonsListController: BaseViewController<PokemonsListView> {
     let provider: PokemonsDataProvider
     weak var pokemonsListDelegate: PokemonsListDelegate?
     var pokemons = [Pokemon]()
+    private let pokemonsPortion = 20
+    private var shownPokemons = 0
     
     // MARK: -
     // MARK: Initializators
@@ -28,26 +38,25 @@ class PokemonsListController: BaseViewController<PokemonsListView> {
     
     public func sendToPrint(data: [Pokemon]) {
         DispatchQueue.main.async {
-            self.pokemons = data
+            self.pokemons += data
             self.rootView?.tableView?.reloadData()
         }
     }
     
-    func pokemonsNames() {
-        self.provider.list(count: 20) { [weak self] response in
-            switch response {
-            case .success(let data):
-                self?.sendToPrint(data: data)
-            case .failure(_):
+    func pokemonsNames(offset: Int = 0) {
+        let names = self.provider.rxList(limit: pokemonsPortion, offset: offset).subscribe(
+            onSuccess: { response in
+                self.sendToPrint(data: response)
+            }, onFailure: { _ in
                 print("Incorrect response from server")
             }
-        }
+        )
     }
     
     func processPokemon(cellNumber: Int) {
         let detailsURL = self.pokemons[cellNumber].url
         
-        self.events.onNext(.showDetails(url: detailsURL))
+        self.events.accept(.showDetails(url: detailsURL))
     }
     
     // MARK: -
@@ -58,5 +67,12 @@ class PokemonsListController: BaseViewController<PokemonsListView> {
         
         self.title = "List of Pokemons"
         self.pokemonsNames()
+        
+        self.rootView?.tableView?.addInfiniteScroll { (tableView) -> Void in
+            print("Scrolling")
+            self.shownPokemons += self.pokemonsPortion
+            self.pokemonsNames(offset: self.shownPokemons)
+            tableView.finishInfiniteScroll()
+        }
     }
 }
