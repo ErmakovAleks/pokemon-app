@@ -44,13 +44,15 @@ class PokemonsListController: BaseViewController<PokemonsListView, PokemonsEvent
     }
     
     func pokemonsNames(offset: Int = 0) {
-        let names = self.provider.rxList(limit: pokemonsPortion, offset: offset).subscribe(
+        let names = self.provider
+            .list(limit: pokemonsPortion, offset: offset)
+            .subscribe(
             onSuccess: { response in
                 self.sendToPrint(data: response)
             }, onFailure: { _ in
                 print("Incorrect response from server")
-            }
-        )
+            })
+            .disposed(by: self.disposeBag)
     }
     
     func processPokemon(cellNumber: Int) {

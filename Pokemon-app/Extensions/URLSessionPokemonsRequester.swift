@@ -2,6 +2,10 @@ import Foundation
 import RxSwift
 import UIKit
 
+enum PokemonAPI: String {
+    case dev = "https://pokeapi.co/api/v2/pokemon/"
+}
+
 // MARK: -
 // MARK: Public class
 
@@ -10,16 +14,14 @@ public class URLSessionPokemonsRequester: PokemonsDataProvider {
     // MARK: -
     // MARK: Public functions
     
-    func list(limit: Int, offset: Int = 0, handler: @escaping PokemonsCardsCompletion) {
-        self.namesTask(limit: limit, offset: offset, handler: handler)
-    }
-    
-    func rxList(limit: Int = 20, offset: Int = 0) -> Single<[Pokemon]> {
+    func list(limit: Int = 20, offset: Int = 0) -> Single<[Pokemon]> {
+        let url = URL(string: PokemonAPI.dev.rawValue + "?limit\(limit)&offset\(offset)")!
         return Single<[Pokemon]>.create { single in
-            self.namesTask(limit: limit, offset: offset) { results in
+            self.commonRequest(url: url) { (results: Result<Pokemons, Error>) in
                 switch results {
                 case .success(let pokemons):
-                    single(.success(pokemons))
+                    guard let results = pokemons.results else { return }
+                    single(.success(results))
                 case .failure(let error):
                     single(.failure(error))
                 }
@@ -28,15 +30,19 @@ public class URLSessionPokemonsRequester: PokemonsDataProvider {
         }
     }
     
-    func details(url: URL, handler: @escaping PokemonDetailCompletion) {
-        self.detailsTask(url: url, handler: handler)
-    }
-    
-    func rxDetails(url: URL) -> Single<Detail> {
+    func details(url: URL) -> Single<Detail> {
         return Single<Detail>.create { single in
-            self.detailsTask(url: url) { results in
+            self.commonRequest(url: url) { (results: Result<PokemonDetails, Error>) in
                 switch results {
-                case .success(let details):
+                case .success(let results):
+                    guard let imageURL = results.sprites?.frontDefault else { return }
+                    let image: UIImage? = self.pokemonImage(url: imageURL)
+                    let details: Detail = (
+                        name: results.name,
+                        height: results.height,
+                        weight: results.weight,
+                        image: image
+                    )
                     single(.success(details))
                 case .failure(let error):
                     single(.failure(error))
@@ -49,12 +55,19 @@ public class URLSessionPokemonsRequester: PokemonsDataProvider {
     // MARK: -
     // MARK: Private functions
     
-    private func namesTask(limit: Int, offset: Int, handler: @escaping PokemonsCardsCompletion) {
-        var request = URLRequest(url: URL(string: "https://pokeapi.co/api/v2/pokemon/?limit=\(limit)&offset=\(offset)")!)
+    private func pokemonImage(url: URL) -> UIImage? {
+        let imageURL = url
+        guard let data = try? Data(contentsOf: imageURL),
+              let image = UIImage(data: data) else { return nil }
+        return image
+    }
+    
+    private func commonRequest<T: Codable>(url: URL, handler: @escaping (Result<T, Error>) -> ()) {
+        var request = URLRequest(url: url)
         request.httpMethod = "GET"
         let task = URLSession.shared.dataTask(with: request) { data, response, error in
-            if let data = data, let pokemons = try? JSONDecoder().decode(Pokemons.self, from: data),
-               let results = pokemons.results {
+            if let data = data,
+               let results = try? JSONDecoder().decode(T.self, from: data) {
                 handler(.success(results))
             }
             if let error = error {
@@ -62,36 +75,5 @@ public class URLSessionPokemonsRequester: PokemonsDataProvider {
             }
         }
         task.resume()
-    }
-    
-    private func detailsTask(url: URL, handler: @escaping PokemonDetailCompletion) {
-        var request = URLRequest(url: url)
-        request.httpMethod = "GET"
-        let task = URLSession.shared.dataTask(with: request) { data, response, error in
-            if let data = data,
-               let details = try? JSONDecoder().decode(PokemonDetails.self, from: data),
-               let name = details.name,
-               let height = details.height,
-               let weight = details.weight,
-               let imageURL = details.sprites?.frontDefault {
-                var image: UIImage?
-                self.pokemonImage(url: imageURL) { pokemonImage in
-                    image = pokemonImage
-                }
-                let pokemonDetails = Detail(name: name, height: height, weight: weight, image: image)
-                handler(.success(pokemonDetails))
-            }
-            if let error = error {
-                handler(.failure(error))
-            }
-        }
-        task.resume()
-    }
-    
-    private func pokemonImage(url: URL, handler: ((UIImage) -> ())) {
-        let imageURL = url
-        guard let data = try? Data(contentsOf: imageURL),
-              let image = UIImage(data: data) else { return }
-        handler(image)
     }
 }

@@ -31,19 +31,15 @@ class PokemonDetailController: BaseViewController<PokemonDetailView, PokemonsEve
     
     public func showDetails() {
         guard let url = self.url else { return }
-//        self.provider.details(url: url) { [weak self] response in
-//            switch response {
-//            case .success(let details):
-//                self?.refresh(details: details)
-//            case .failure(_):
-//                print("Incorrect response from server")
-//            }
-//        }
-        let details = self.provider.rxDetails(url: url).subscribe { details in
+        
+        let details = self.provider
+            .details(url: url)
+            .subscribe { details in
             self.refresh(details: details)
         } onFailure: { _ in
             print("Incorrect response from server")
         }
+            .disposed(by: self.disposeBag)
     }
     
     // MARK: -
