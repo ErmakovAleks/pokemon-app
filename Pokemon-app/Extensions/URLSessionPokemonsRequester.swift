@@ -2,20 +2,21 @@ import Foundation
 import RxSwift
 import UIKit
 
-enum PokemonAPI: String {
-    case dev = "https://pokeapi.co/api/v2/pokemon/"
-}
-
 // MARK: -
 // MARK: Public class
 
-public class URLSessionPokemonsRequester: PokemonsDataProvider {
+public class URLSessionPokemonsRequester: NSObject, PokemonsDataProvider {
+    
+    // MARK: -
+    // MARK: Variables
+    
+    var linkEntry: String = PokemonAPI.dev.rawValue
     
     // MARK: -
     // MARK: Public functions
     
     func list(limit: Int = 20, offset: Int = 0) -> Single<[Pokemon]> {
-        let url = URL(string: PokemonAPI.dev.rawValue + "?limit\(limit)&offset\(offset)")!
+        let url = URL(string: self.linkEntry + "?limit=\(limit)&offset=\(offset)")!
         return Single<[Pokemon]>.create { single in
             self.commonRequest(url: url) { (results: Result<Pokemons, Error>) in
                 switch results {
@@ -56,8 +57,7 @@ public class URLSessionPokemonsRequester: PokemonsDataProvider {
     // MARK: Private functions
     
     private func pokemonImage(url: URL) -> UIImage? {
-        let imageURL = url
-        guard let data = try? Data(contentsOf: imageURL),
+        guard let data = try? Data(contentsOf: url),
               let image = UIImage(data: data) else { return nil }
         return image
     }
@@ -69,7 +69,7 @@ public class URLSessionPokemonsRequester: PokemonsDataProvider {
             if let data = data,
                let results = try? JSONDecoder().decode(T.self, from: data) {
                 handler(.success(results))
-            }
+            } else { print("Invalid response!") }
             if let error = error {
                 handler(.failure(error))
             }

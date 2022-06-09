@@ -19,6 +19,7 @@ class PokemonDetailController: BaseViewController<PokemonDetailView, PokemonsEve
     init(provider: PokemonsDataProvider, url: URL?){
         self.url = url
         self.provider = provider
+        
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -32,7 +33,7 @@ class PokemonDetailController: BaseViewController<PokemonDetailView, PokemonsEve
     public func showDetails() {
         guard let url = self.url else { return }
         
-        let details = self.provider
+        self.provider
             .details(url: url)
             .subscribe { details in
             self.refresh(details: details)

@@ -25,10 +25,10 @@ class PokemonsListController: BaseViewController<PokemonsListView, PokemonsEvent
     
     init(provider: PokemonsDataProvider){
         self.provider = provider
-        
+
         super.init(nibName: nil, bundle: nil)
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -44,11 +44,11 @@ class PokemonsListController: BaseViewController<PokemonsListView, PokemonsEvent
     }
     
     func pokemonsNames(offset: Int = 0) {
-        let names = self.provider
+        self.provider
             .list(limit: pokemonsPortion, offset: offset)
             .subscribe(
-            onSuccess: { response in
-                self.sendToPrint(data: response)
+            onSuccess: { [weak self] response in
+                self?.sendToPrint(data: response)
             }, onFailure: { _ in
                 print("Incorrect response from server")
             })
@@ -71,7 +71,6 @@ class PokemonsListController: BaseViewController<PokemonsListView, PokemonsEvent
         self.pokemonsNames()
         
         self.rootView?.tableView?.addInfiniteScroll { (tableView) -> Void in
-            print("Scrolling")
             self.shownPokemons += self.pokemonsPortion
             self.pokemonsNames(offset: self.shownPokemons)
             tableView.finishInfiniteScroll()

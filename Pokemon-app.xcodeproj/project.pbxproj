@@ -17,6 +17,16 @@
 		D93509342820203600CF7AA4 /* BaseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D93509332820203600CF7AA4 /* BaseView.swift */; };
 		D94943D327D73BEC0099B43B /* RootViewGettable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D94943D227D73BEC0099B43B /* RootViewGettable.swift */; };
 		D94943D627D753FD0099B43B /* RootViewGettableExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = D94943D527D753FD0099B43B /* RootViewGettableExtension.swift */; };
+		D953DEAE2840C50300E84CD3 /* Types.swift in Sources */ = {isa = PBXBuildFile; fileRef = D953DEA12840C50300E84CD3 /* Types.swift */; };
+		D953DEAF2840C50300E84CD3 /* Operators.swift in Sources */ = {isa = PBXBuildFile; fileRef = D953DEA32840C50300E84CD3 /* Operators.swift */; };
+		D953DEB02840C50300E84CD3 /* NetworkProcessable+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D953DEA52840C50300E84CD3 /* NetworkProcessable+Extensions.swift */; };
+		D953DEB12840C50300E84CD3 /* F.swift in Sources */ = {isa = PBXBuildFile; fileRef = D953DEA62840C50300E84CD3 /* F.swift */; };
+		D953DEB22840C50300E84CD3 /* Dictionary+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = D953DEA72840C50300E84CD3 /* Dictionary+Extension.swift */; };
+		D953DEB32840C50300E84CD3 /* URL+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D953DEA82840C50300E84CD3 /* URL+Extensions.swift */; };
+		D953DEB42840C50300E84CD3 /* Headers+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D953DEA92840C50300E84CD3 /* Headers+Extensions.swift */; };
+		D953DEB52840C50300E84CD3 /* ErrorDecode.swift in Sources */ = {isa = PBXBuildFile; fileRef = D953DEAB2840C50300E84CD3 /* ErrorDecode.swift */; };
+		D953DEB62840C50300E84CD3 /* Service.swift in Sources */ = {isa = PBXBuildFile; fileRef = D953DEAC2840C50300E84CD3 /* Service.swift */; };
+		D953DEB72840C50300E84CD3 /* URLPathBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = D953DEAD2840C50300E84CD3 /* URLPathBuilder.swift */; };
 		D9672B0827BD39AF00C22518 /* PokemonsListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9672B0727BD39AF00C22518 /* PokemonsListView.swift */; };
 		D99014EA27AD230600BF4A96 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D99014E927AD230600BF4A96 /* AppDelegate.swift */; };
 		D99014EE27AD230600BF4A96 /* PokemonsListController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D99014ED27AD230600BF4A96 /* PokemonsListController.swift */; };
@@ -25,6 +35,7 @@
 		D99014FE27AD26EC00BF4A96 /* PokemonsListController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D99014FD27AD26EC00BF4A96 /* PokemonsListController.xib */; };
 		D990150027AD299000BF4A96 /* URLSessionPokemonsRequester.swift in Sources */ = {isa = PBXBuildFile; fileRef = D99014FF27AD299000BF4A96 /* URLSessionPokemonsRequester.swift */; };
 		D9934E0928254BD70000AA70 /* BaseCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9934E0828254BD70000AA70 /* BaseCoordinator.swift */; };
+		D9A34FA4283F93010069AFC1 /* NoriSessionPokemonRequester.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9A34FA3283F93010069AFC1 /* NoriSessionPokemonRequester.swift */; };
 		D9A9B6CC27F568AE001281DA /* MainCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9A9B6CB27F568AE001281DA /* MainCoordinator.swift */; };
 		D9AF8D9227E476C100A80E74 /* Pokemons.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9AF8D9127E476C100A80E74 /* Pokemons.swift */; };
 		D9F81A3327EAE360000DE32E /* DataProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9F81A3227EAE360000DE32E /* DataProvider.swift */; };
@@ -44,6 +55,16 @@
 		D93509332820203600CF7AA4 /* BaseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseView.swift; sourceTree = "<group>"; };
 		D94943D227D73BEC0099B43B /* RootViewGettable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootViewGettable.swift; sourceTree = "<group>"; };
 		D94943D527D753FD0099B43B /* RootViewGettableExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootViewGettableExtension.swift; sourceTree = "<group>"; };
+		D953DEA12840C50300E84CD3 /* Types.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Types.swift; sourceTree = "<group>"; };
+		D953DEA32840C50300E84CD3 /* Operators.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Operators.swift; sourceTree = "<group>"; };
+		D953DEA52840C50300E84CD3 /* NetworkProcessable+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NetworkProcessable+Extensions.swift"; sourceTree = "<group>"; };
+		D953DEA62840C50300E84CD3 /* F.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = F.swift; sourceTree = "<group>"; };
+		D953DEA72840C50300E84CD3 /* Dictionary+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Dictionary+Extension.swift"; sourceTree = "<group>"; };
+		D953DEA82840C50300E84CD3 /* URL+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "URL+Extensions.swift"; sourceTree = "<group>"; };
+		D953DEA92840C50300E84CD3 /* Headers+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Headers+Extensions.swift"; sourceTree = "<group>"; };
+		D953DEAB2840C50300E84CD3 /* ErrorDecode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ErrorDecode.swift; sourceTree = "<group>"; };
+		D953DEAC2840C50300E84CD3 /* Service.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Service.swift; sourceTree = "<group>"; };
+		D953DEAD2840C50300E84CD3 /* URLPathBuilder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = URLPathBuilder.swift; sourceTree = "<group>"; };
 		D9672B0727BD39AF00C22518 /* PokemonsListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonsListView.swift; sourceTree = "<group>"; };
 		D99014E627AD230600BF4A96 /* Pokemon-app.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Pokemon-app.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D99014E927AD230600BF4A96 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -54,6 +75,7 @@
 		D99014FD27AD26EC00BF4A96 /* PokemonsListController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PokemonsListController.xib; sourceTree = "<group>"; };
 		D99014FF27AD299000BF4A96 /* URLSessionPokemonsRequester.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLSessionPokemonsRequester.swift; sourceTree = "<group>"; };
 		D9934E0828254BD70000AA70 /* BaseCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseCoordinator.swift; sourceTree = "<group>"; };
+		D9A34FA3283F93010069AFC1 /* NoriSessionPokemonRequester.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoriSessionPokemonRequester.swift; sourceTree = "<group>"; };
 		D9A9B6CB27F568AE001281DA /* MainCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainCoordinator.swift; sourceTree = "<group>"; };
 		D9AF8D8F27E4754300A80E74 /* Requester.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Requester.swift; sourceTree = "<group>"; };
 		D9AF8D9127E476C100A80E74 /* Pokemons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pokemons.swift; sourceTree = "<group>"; };
@@ -135,6 +157,63 @@
 			path = Extensions;
 			sourceTree = "<group>";
 		};
+		D953DE9E2840C50300E84CD3 /* NoriNetworkService */ = {
+			isa = PBXGroup;
+			children = (
+				D953DE9F2840C50300E84CD3 /* sources */,
+			);
+			path = NoriNetworkService;
+			sourceTree = "<group>";
+		};
+		D953DE9F2840C50300E84CD3 /* sources */ = {
+			isa = PBXGroup;
+			children = (
+				D953DEA02840C50300E84CD3 /* Types */,
+				D953DEA22840C50300E84CD3 /* Operators */,
+				D953DEA42840C50300E84CD3 /* Extensions */,
+				D953DEAA2840C50300E84CD3 /* Service */,
+			);
+			path = sources;
+			sourceTree = "<group>";
+		};
+		D953DEA02840C50300E84CD3 /* Types */ = {
+			isa = PBXGroup;
+			children = (
+				D953DEA12840C50300E84CD3 /* Types.swift */,
+			);
+			path = Types;
+			sourceTree = "<group>";
+		};
+		D953DEA22840C50300E84CD3 /* Operators */ = {
+			isa = PBXGroup;
+			children = (
+				D953DEA32840C50300E84CD3 /* Operators.swift */,
+			);
+			path = Operators;
+			sourceTree = "<group>";
+		};
+		D953DEA42840C50300E84CD3 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				D953DEA52840C50300E84CD3 /* NetworkProcessable+Extensions.swift */,
+				D953DEA62840C50300E84CD3 /* F.swift */,
+				D953DEA72840C50300E84CD3 /* Dictionary+Extension.swift */,
+				D953DEA82840C50300E84CD3 /* URL+Extensions.swift */,
+				D953DEA92840C50300E84CD3 /* Headers+Extensions.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		D953DEAA2840C50300E84CD3 /* Service */ = {
+			isa = PBXGroup;
+			children = (
+				D953DEAB2840C50300E84CD3 /* ErrorDecode.swift */,
+				D953DEAC2840C50300E84CD3 /* Service.swift */,
+				D953DEAD2840C50300E84CD3 /* URLPathBuilder.swift */,
+			);
+			path = Service;
+			sourceTree = "<group>";
+		};
 		D99014DD27AD230600BF4A96 = {
 			isa = PBXGroup;
 			children = (
@@ -157,6 +236,7 @@
 		D99014E827AD230600BF4A96 /* Pokemon-app */ = {
 			isa = PBXGroup;
 			children = (
+				D953DE9E2840C50300E84CD3 /* NoriNetworkService */,
 				D9934E0728254B910000AA70 /* Base Entities */,
 				D9A9B6C827F4C00F001281DA /* Coordinators */,
 				D9F81A3427EB148A000DE32E /* Associated Types */,
@@ -214,6 +294,7 @@
 			isa = PBXGroup;
 			children = (
 				D99014FF27AD299000BF4A96 /* URLSessionPokemonsRequester.swift */,
+				D9A34FA3283F93010069AFC1 /* NoriSessionPokemonRequester.swift */,
 			);
 			name = Managers;
 			path = Extensions;
@@ -344,20 +425,31 @@
 			buildActionMask = 2147483647;
 			files = (
 				D9F81A3627EB1592000DE32E /* AssociatedTypes.swift in Sources */,
+				D953DEB62840C50300E84CD3 /* Service.swift in Sources */,
 				D9934E0928254BD70000AA70 /* BaseCoordinator.swift in Sources */,
+				D953DEAF2840C50300E84CD3 /* Operators.swift in Sources */,
 				D9A9B6CC27F568AE001281DA /* MainCoordinator.swift in Sources */,
+				D953DEAE2840C50300E84CD3 /* Types.swift in Sources */,
 				D9672B0827BD39AF00C22518 /* PokemonsListView.swift in Sources */,
+				D953DEB02840C50300E84CD3 /* NetworkProcessable+Extensions.swift in Sources */,
 				D93509342820203600CF7AA4 /* BaseView.swift in Sources */,
+				D953DEB12840C50300E84CD3 /* F.swift in Sources */,
 				D99014EE27AD230600BF4A96 /* PokemonsListController.swift in Sources */,
 				D94943D627D753FD0099B43B /* RootViewGettableExtension.swift in Sources */,
+				D953DEB72840C50300E84CD3 /* URLPathBuilder.swift in Sources */,
+				D953DEB22840C50300E84CD3 /* Dictionary+Extension.swift in Sources */,
+				D953DEB52840C50300E84CD3 /* ErrorDecode.swift in Sources */,
 				D94943D327D73BEC0099B43B /* RootViewGettable.swift in Sources */,
 				D9AF8D9227E476C100A80E74 /* Pokemons.swift in Sources */,
 				D9350930281FF6A700CF7AA4 /* PokemonsListDelegate.swift in Sources */,
 				D9F81A3327EAE360000DE32E /* DataProvider.swift in Sources */,
 				D90C04652812E96500804AA0 /* PokemonDetailController.swift in Sources */,
+				D953DEB32840C50300E84CD3 /* URL+Extensions.swift in Sources */,
 				D94943D327D73BEC0099B43B /* RootViewGettable.swift in Sources */,
 				D90C04682812E9CA00804AA0 /* PokemonDetailView.swift in Sources */,
+				D953DEB42840C50300E84CD3 /* Headers+Extensions.swift in Sources */,
 				D990150027AD299000BF4A96 /* URLSessionPokemonsRequester.swift in Sources */,
+				D9A34FA4283F93010069AFC1 /* NoriSessionPokemonRequester.swift in Sources */,
 				D93509322820080000CF7AA4 /* BaseViewController.swift in Sources */,
 				D99014EA27AD230600BF4A96 /* AppDelegate.swift in Sources */,
 				D90C04522812AB9D00804AA0 /* PokemonDetails.swift in Sources */,
