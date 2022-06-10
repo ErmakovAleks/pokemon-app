@@ -5,12 +5,12 @@ import UIKit
 // MARK: -
 // MARK: Public class
 
-public class URLSessionPokemonsRequester: NSObject, PokemonsDataProvider {
+public class URLSessionPokemonsRequester: PokemonsDataProvider {
     
     // MARK: -
     // MARK: Variables
     
-    var linkEntry: String = PokemonAPI.dev.rawValue
+    var linkEntry: String = PokemonAPI.environment()
     
     // MARK: -
     // MARK: Public functions

@@ -1,17 +1,25 @@
 import Foundation
 import UIKit
 
-class MainCoordinator<Service: PokemonsDataProvider>: BaseCoordinator, PokemonsListDelegate where Service: NSObject {
+class MainCoordinator: BaseCoordinator, PokemonsListDelegate {
     
     // MARK: -
-    // MARK: Associated Types
+    // MARK: Variables
     
-    typealias NetworkService = Service
+    let provider: PokemonsDataProvider
     
     // MARK: -
-    // MARK: Public variables
+    // MARK: Initializators
     
-    let provider = NetworkService()
+    init(provider: PokemonsDataProvider) {
+        self.provider = provider
+        
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     // MARK: -
     // MARK: BaseCoordinator functions

@@ -16,7 +16,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         let window = UIWindow(frame: UIScreen.main.bounds)
-        let coordinator = MainCoordinator<NoriSessionPokemonRequester<UrlSessionService>>()
+        let provider: PokemonsDataProvider
+        provider = DataProvider<NoriSessionPokemonRequester<UrlSessionService>>()
+        let coordinator = MainCoordinator(provider: provider)
         window.rootViewController = coordinator
         window.makeKeyAndVisible()
         self.window = window
