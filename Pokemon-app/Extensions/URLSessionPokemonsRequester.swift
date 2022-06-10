@@ -16,7 +16,10 @@ public class URLSessionPokemonsRequester: PokemonsDataProvider {
     // MARK: Public functions
     
     func list(limit: Int = 20, offset: Int = 0) -> Single<[Pokemon]> {
-        let url = URL(string: self.linkEntry + "?limit=\(limit)&offset=\(offset)")!
+        guard let url = URL(string: self.linkEntry + "?limit=\(limit)&offset=\(offset)") else {
+            return .error(Errors.notValidUrl)
+        }
+        
         return Single<[Pokemon]>.create { single in
             self.commonRequest(url: url) { (results: Result<Pokemons, Error>) in
                 switch results {

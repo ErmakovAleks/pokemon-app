@@ -4,7 +4,7 @@ import RxSwift
 import RxCocoa
 
 // MARK: -
-// MARK: Pokemon API
+// MARK: Enums
 
 enum PokemonAPI: String {
     
@@ -19,6 +19,10 @@ enum PokemonAPI: String {
         return PokemonAPI.prod.rawValue
         #endif
     }
+}
+
+enum Errors: Error {
+    case notValidUrl
 }
 
 // MARK: -

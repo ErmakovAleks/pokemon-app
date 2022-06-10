@@ -8,7 +8,7 @@
 import Foundation
 import RxSwift
 
-class NoriSessionPokemonRequester<Service: DataSessionService>: NSObject, PokemonsDataProvider {
+class NoriSessionPokemonRequester<Service: DataSessionService>: PokemonsDataProvider {
     
     // MARK: -
     // MARK: Variables
@@ -19,8 +19,11 @@ class NoriSessionPokemonRequester<Service: DataSessionService>: NSObject, Pokemo
     // MARK: PokemonsDataProvider functions
     
     func list(limit: Int, offset: Int) -> Single<[Pokemon]> {
+        guard let url = URL(string: self.linkEntry + "?limit=\(limit)&offset=\(offset)") else {
+            return .error(Errors.notValidUrl)
+        }
+        
         return Single<[Pokemon]>.create { single in
-            let url = URL(string: self.linkEntry + "?limit=\(limit)&offset=\(offset)")!
             Service.request(model: Pokemons.self, url: url) |*| get { response in
                 switch response {
                 case .success(let pokemons):
