@@ -21,43 +21,36 @@ class DataProvider<InnerProvider: PokemonsDataProvider>: PokemonsDataProvider wh
     
     var linkEntry: String = PokemonAPI.environment()
     var provider = Provider()
-    var pokemonsCache = CacheManager<Single<[Pokemon]>>()
-    var detailsCache = CacheManager<Single<Detail>>()
+    var cache: PokemonsCacheble
+    
+    init(cache: PokemonsCacheble) {
+        self.cache = cache
+    }
     
     // MARK: -
     // MARK: PokemonsDataProvider Functions
     
     func list(limit: Int, offset: Int) -> Single<[Pokemon]> {
         let url = URL(string: self.linkEntry + "?limit=\(limit)&offset=\(offset)")!
-        if let pokemons = self.pokemonsCache.cache.object(forKey: url.absoluteString as NSString) {
+        if let pokemons = self.cache.pokemonsCache.object(forKey: url.absoluteString as NSString) {
             print("Cached!")
             return pokemons.value
         } else {
             print("Downloaded!")
             let pokemons = self.provider.list(limit: limit, offset: offset)
-            self.pokemonsCache
-                .cache
-                .setObject(
-                    CacheManager<Single<[Pokemon]>>.intoObject(notObject: pokemons),
-                    forKey: url.absoluteString as NSString
-                )
-            return self.provider.list(limit: limit, offset: offset)
+            self.cache.addToCache(notObject: pokemons, url: url)
+            return pokemons
         }
     }
     
     func details(url: URL) -> Single<Detail> {
-        if let details = self.detailsCache.cache.object(forKey: url.absoluteString as NSString) {
+        if let details = self.cache.detailsCache.object(forKey: url.absoluteString as NSString) {
             print("Cached!")
             return details.value
         } else {
             print("Downloaded!")
             let details = self.provider.details(url: url)
-            self.detailsCache
-                .cache
-                .setObject(
-                    CacheManager<Single<Detail>>.intoObject(notObject: details),
-                    forKey: url.absoluteString as NSString
-                )
+            self.cache.addToCache(notObject: details, url: url)
             return details
         }
     }

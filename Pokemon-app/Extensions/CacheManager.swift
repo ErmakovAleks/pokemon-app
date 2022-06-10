@@ -8,11 +8,24 @@
 import Foundation
 import RxSwift
 
-class CacheManager<T> {
+class CacheManager: PokemonsCacheble {
     
-    var cache = NSCache<NSString, ClassWrapper<T>>()
+    var pokemonsCache = NSCache<NSString, ClassWrapper<Single<[Pokemon]>>>()
+    var detailsCache = NSCache<NSString, ClassWrapper<Single<Detail>>>()
     
-    static func intoObject<T>(notObject: T) -> ClassWrapper<T> {
-        return ClassWrapper(notObject)
+    func intoObject<T>(from notObj: T) -> ClassWrapper<T> {
+        return ClassWrapper<T>(notObj)
+    }
+    
+    func addToCache<T>(notObject: T, url: URL) {
+        let object = intoObject(from: notObject)
+        switch object {
+        case let obj as ClassWrapper<Single<[Pokemon]>>:
+            self.pokemonsCache.setObject(obj, forKey: url.absoluteString as NSString)
+        case let obj as ClassWrapper<Single<Detail>>:
+            self.detailsCache.setObject(obj, forKey: url.absoluteString as NSString)
+        default:
+            break
+        }
     }
 }
