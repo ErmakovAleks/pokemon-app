@@ -16,8 +16,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         let window = UIWindow(frame: UIScreen.main.bounds)
+        let innerProvider = NoriSessionPokemonRequester<UrlSessionService>()
         let cache = CacheManager()
-        let provider = DataProvider<NoriSessionPokemonRequester<UrlSessionService>>(cache: cache)
+        let provider = DataProvider(innerProvider: innerProvider, cache: cache)
         let coordinator = MainCoordinator(provider: provider)
         window.rootViewController = coordinator
         window.makeKeyAndVisible()

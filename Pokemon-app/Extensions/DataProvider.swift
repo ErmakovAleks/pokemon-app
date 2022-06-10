@@ -9,21 +9,17 @@ import Foundation
 import RxSwift
 import UIKit
 
-class DataProvider<InnerProvider: PokemonsDataProvider>: PokemonsDataProvider where InnerProvider: NSObject {
-    
-    // MARK: -
-    // MARK: Type Inferences
-    
-    typealias Provider = InnerProvider
+class DataProvider: PokemonsDataProvider {
     
     // MARK: -
     // MARK: Variables
     
     var linkEntry: String = PokemonAPI.environment()
-    var provider = Provider()
+    var innerProvider: PokemonsDataProvider
     var cache: PokemonsCacheble
     
-    init(cache: PokemonsCacheble) {
+    init(innerProvider: PokemonsDataProvider, cache: PokemonsCacheble) {
+        self.innerProvider = innerProvider
         self.cache = cache
     }
     
@@ -37,7 +33,7 @@ class DataProvider<InnerProvider: PokemonsDataProvider>: PokemonsDataProvider wh
             return pokemons.value
         } else {
             print("Downloaded!")
-            let pokemons = self.provider.list(limit: limit, offset: offset)
+            let pokemons = self.innerProvider.list(limit: limit, offset: offset)
             self.cache.addToCache(notObject: pokemons, url: url)
             return pokemons
         }
@@ -49,7 +45,7 @@ class DataProvider<InnerProvider: PokemonsDataProvider>: PokemonsDataProvider wh
             return details.value
         } else {
             print("Downloaded!")
-            let details = self.provider.details(url: url)
+            let details = self.innerProvider.details(url: url)
             self.cache.addToCache(notObject: details, url: url)
             return details
         }
