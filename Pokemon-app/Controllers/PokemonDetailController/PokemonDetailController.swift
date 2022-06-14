@@ -36,7 +36,13 @@ class PokemonDetailController: BaseViewController<PokemonDetailView, PokemonsEve
         self.provider
             .details(url: url)
             .subscribe { details in
-            self.refresh(details: details)
+                var image: UIImage?
+                if let url = details.sprites?.frontDefault {
+                    self.provider.pokemonImage(url: url, handler: { [weak self] img in
+                        image = img
+                    })
+                }
+                self.refresh(details: details, image: image)
         } onFailure: { _ in
             print("Incorrect response from server")
         }
@@ -46,11 +52,11 @@ class PokemonDetailController: BaseViewController<PokemonDetailView, PokemonsEve
     // MARK: -
     // MARK: Private functions
     
-    private func refresh(details: Detail) {
+    private func refresh(details: PokemonDetails, image: UIImage?) {
         self.name = details.name
         self.height = details.height
         self.weight = details.weight
-        self.image = details.image
+        self.image = image
         
         DispatchQueue.main.async {
             self.rootView?.pokemonNameLabel?.text = self.name

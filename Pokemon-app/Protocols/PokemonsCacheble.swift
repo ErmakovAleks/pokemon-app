@@ -8,10 +8,11 @@
 import Foundation
 import RxSwift
 
-protocol PokemonsCacheble: AnyObject {
+protocol PokemonsCacheble {
     
-    var pokemonsCache: NSCache<NSString, ClassWrapper<Single<[Pokemon]>>> { get set }
-    var detailsCache: NSCache<NSString, ClassWrapper<Single<Detail>>> { get set }
+    var defaults: UserDefaults { get set }
     
-    func addToCache<T>(notObject: T, url: URL)
+    func addToDefaults(image: UIImage, url: URL)
+    
+    func checkDefaults(url: URL) -> UIImage?
 }

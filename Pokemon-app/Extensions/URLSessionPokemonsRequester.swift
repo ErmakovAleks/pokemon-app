@@ -34,20 +34,12 @@ public class URLSessionPokemonsRequester: PokemonsDataProvider {
         }
     }
     
-    func details(url: URL) -> Single<Detail> {
-        return Single<Detail>.create { single in
+    func details(url: URL) -> Single<PokemonDetails> {
+        return Single<PokemonDetails>.create { single in
             self.commonRequest(url: url) { (results: Result<PokemonDetails, Error>) in
                 switch results {
                 case .success(let results):
-                    guard let imageURL = results.sprites?.frontDefault else { return }
-                    let image: UIImage? = self.pokemonImage(url: imageURL)
-                    let details: Detail = (
-                        name: results.name,
-                        height: results.height,
-                        weight: results.weight,
-                        image: image
-                    )
-                    single(.success(details))
+                    single(.success(results))
                 case .failure(let error):
                     single(.failure(error))
                 }
@@ -58,12 +50,6 @@ public class URLSessionPokemonsRequester: PokemonsDataProvider {
     
     // MARK: -
     // MARK: Private functions
-    
-    private func pokemonImage(url: URL) -> UIImage? {
-        guard let data = try? Data(contentsOf: url),
-              let image = UIImage(data: data) else { return nil }
-        return image
-    }
     
     private func commonRequest<T: Codable>(url: URL, handler: @escaping (Result<T, Error>) -> ()) {
         var request = URLRequest(url: url)

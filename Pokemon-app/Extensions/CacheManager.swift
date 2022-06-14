@@ -10,22 +10,18 @@ import RxSwift
 
 class CacheManager: PokemonsCacheble {
     
-    var pokemonsCache = NSCache<NSString, ClassWrapper<Single<[Pokemon]>>>()
-    var detailsCache = NSCache<NSString, ClassWrapper<Single<Detail>>>()
+    var defaults = UserDefaults.standard
     
-    func intoObject<T>(from notObj: T) -> ClassWrapper<T> {
-        return ClassWrapper<T>(notObj)
+    func addToDefaults(image: UIImage, url: URL) {
+        if let pngImage = image.pngData() {
+            self.defaults.set(pngImage, forKey: url.absoluteString)
+        }
     }
     
-    func addToCache<T>(notObject: T, url: URL) {
-        let object = intoObject(from: notObject)
-        switch object {
-        case let obj as ClassWrapper<Single<[Pokemon]>>:
-            self.pokemonsCache.setObject(obj, forKey: url.absoluteString as NSString)
-        case let obj as ClassWrapper<Single<Detail>>:
-            self.detailsCache.setObject(obj, forKey: url.absoluteString as NSString)
-        default:
-            break
-        }
+    func checkDefaults(url: URL) -> UIImage? {
+        if let imageData = defaults.object(forKey: url.absoluteString) as? Data,
+           let image = UIImage(data: imageData) {
+            return image
+        } else { return nil }
     }
 }

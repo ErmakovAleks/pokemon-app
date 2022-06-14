@@ -38,24 +38,12 @@ class NoriSessionPokemonRequester<Service: DataSessionService>: PokemonsDataProv
         }
     }
     
-    func details(url: URL) -> Single<Detail> {
-        return Single<Detail>.create { single in
+    func details(url: URL) -> Single<PokemonDetails> {
+        return Single<PokemonDetails>.create { single in
             Service.request(model: PokemonDetails.self, url: url) |*| get { response in
                 switch response {
                 case .success(let results):
-                    var image: UIImage?
-                    if let imageURL = results.sprites?.frontDefault,
-                    let data = try? Data(contentsOf: imageURL)
-                    {
-                        image = UIImage(data: data)
-                    }
-                    let details: Detail = (
-                        name: results.name,
-                        height: results.height,
-                        weight: results.weight,
-                        image: image
-                    )
-                    single(.success(details))
+                    single(.success(results))
                 case .failure(let error):
                     single(.failure(error))
                 }

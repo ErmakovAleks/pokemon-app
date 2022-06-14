@@ -34,5 +34,18 @@ protocol PokemonsDataProvider {
     
     func list(limit: Int, offset: Int) -> Single<[Pokemon]>
     
-    func details(url: URL) -> Single<Detail>
+    func details(url: URL) -> Single<PokemonDetails>
+    
+    func pokemonImage(url: URL, handler: @escaping ((UIImage?) -> Void))
+}
+
+extension PokemonsDataProvider {
+    
+    func pokemonImage(url: URL, handler: @escaping ((UIImage?) -> Void)) {
+        var image: UIImage?
+        if let data = try? Data(contentsOf: url) {
+            image = UIImage(data: data)
+        }
+        handler(image)
+    }
 }

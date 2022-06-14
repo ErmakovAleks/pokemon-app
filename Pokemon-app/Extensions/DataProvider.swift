@@ -27,30 +27,25 @@ class DataProvider: PokemonsDataProvider {
     // MARK: PokemonsDataProvider Functions
     
     func list(limit: Int, offset: Int) -> Single<[Pokemon]> {
-        let url = URL(string: self.linkEntry + "?limit=\(limit)&offset=\(offset)")!
-        if let pokemons = self.cache.pokemonsCache.object(forKey: url.absoluteString as NSString) {
-            print("Cached!")
-            return pokemons.value
-        } else {
-            print("Downloaded!")
             let pokemons = self.innerProvider.list(limit: limit, offset: offset)
-            self.cache.addToCache(notObject: pokemons, url: url)
             return pokemons
-        }
     }
     
-    func details(url: URL) -> Single<Detail> {
-        if let details = self.cache.detailsCache.object(forKey: url.absoluteString as NSString) {
+    func details(url: URL) -> Single<PokemonDetails> {
+        let details = self.innerProvider.details(url: url)
+        return details
+    }
+    
+    func pokemonImage(url: URL, handler: @escaping ((UIImage?) -> Void)) {
+        if let image = self.cache.checkDefaults(url: url) {
             print("Cached!")
-            return details.value
+            handler(image)
         } else {
-            print("Downloaded!")
-            let details = self.innerProvider.details(url: url)
-            self.cache.addToCache(notObject: details, url: url)
-            return details
+            if let data = try? Data(contentsOf: url), let image = UIImage(data: data) {
+                print("Downloaded!")
+                self.cache.addToDefaults(image: image, url: url)
+                handler(image)
+            } else { handler(nil) }
         }
     }
-    
-    
-    
 }

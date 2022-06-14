@@ -19,6 +19,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let innerProvider = NoriSessionPokemonRequester<UrlSessionService>()
         let cache = CacheManager()
         let provider = DataProvider(innerProvider: innerProvider, cache: cache)
+        //let provider = URLSessionPokemonsRequester()
         let coordinator = MainCoordinator(provider: provider)
         window.rootViewController = coordinator
         window.makeKeyAndVisible()
