@@ -35,17 +35,16 @@ class PokemonDetailController: BaseViewController<PokemonDetailView, PokemonsEve
         
         self.provider
             .details(url: url)
-            .subscribe { details in
-                var image: UIImage?
+            .subscribe (
+                onSuccess: { details in
                 if let url = details.sprites?.frontDefault {
                     self.provider.pokemonImage(url: url, handler: { [weak self] img in
-                        image = img
+                        self?.refresh(details: details, image: img)
                     })
                 }
-                self.refresh(details: details, image: image)
-        } onFailure: { _ in
+                }, onFailure: { _ in
             print("Incorrect response from server")
-        }
+        })
             .disposed(by: self.disposeBag)
     }
     

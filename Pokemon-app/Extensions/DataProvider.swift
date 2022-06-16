@@ -37,13 +37,13 @@ class DataProvider: PokemonsDataProvider {
     }
     
     func pokemonImage(url: URL, handler: @escaping ((UIImage?) -> Void)) {
-        if let image = self.cache.checkDefaults(url: url) {
+        if let image = self.cache.checkCache(url: url) {
             print("Cached!")
             handler(image)
         } else {
             if let data = try? Data(contentsOf: url), let image = UIImage(data: data) {
                 print("Downloaded!")
-                self.cache.addToDefaults(image: image, url: url)
+                self.cache.addToCacheFolder(image: image, url: url)
                 handler(image)
             } else { handler(nil) }
         }

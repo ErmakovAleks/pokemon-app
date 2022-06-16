@@ -42,10 +42,12 @@ protocol PokemonsDataProvider {
 extension PokemonsDataProvider {
     
     func pokemonImage(url: URL, handler: @escaping ((UIImage?) -> Void)) {
-        var image: UIImage?
-        if let data = try? Data(contentsOf: url) {
-            image = UIImage(data: data)
+        DispatchQueue.global(qos: .background).async {
+            var image: UIImage?
+            if let data = try? Data(contentsOf: url) {
+                image = UIImage(data: data)
+            }
+            handler(image)
         }
-        handler(image)
     }
 }

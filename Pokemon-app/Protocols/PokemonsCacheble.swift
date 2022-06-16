@@ -10,9 +10,7 @@ import RxSwift
 
 protocol PokemonsCacheble {
     
-    var defaults: UserDefaults { get set }
+    func addToCacheFolder(image: UIImage, url: URL)
     
-    func addToDefaults(image: UIImage, url: URL)
-    
-    func checkDefaults(url: URL) -> UIImage?
+    func checkCache(url: URL) -> UIImage?
 }
