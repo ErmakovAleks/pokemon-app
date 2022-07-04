@@ -8,6 +8,7 @@
 import UIKit
 import AVKit
 import AVFoundation
+import CoreData
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -25,6 +26,32 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         self.window = window
         
         return true
+    }
+    
+    // MARK: -
+    // MARK: Core Data
+    
+    lazy var persistentContainer: NSPersistentContainer = {
+        let container = NSPersistentContainer(name: "PokemonDataModel")
+        container.loadPersistentStores(completionHandler: { (storeDescription, error) in
+            if let error = error as NSError? {
+                fatalError("Unresolved error \(error), \(error.userInfo)")
+            }
+        })
+        return container
+    }()
+    
+    func saveContext() {
+        let context = persistentContainer.viewContext
+        if context.hasChanges {
+            do {
+                try context.save()
+                print("Data is saved!")
+            } catch {
+                let error = error as NSError
+                fatalError("Unresolved error \(error), \(error.userInfo)")
+            }
+        }
     }
 }
 

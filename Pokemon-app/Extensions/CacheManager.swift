@@ -20,7 +20,7 @@ class CacheManager: PokemonsCacheble {
     // MARK: Initializators
     
     init() {
-        checkAndCreateDirectory(folder: "cachedImages")
+        checkAndCreateDirectory()
     }
     
     // MARK: -
@@ -30,40 +30,14 @@ class CacheManager: PokemonsCacheble {
         self.fileManager.urls(for: .cachesDirectory, in: .userDomainMask).first
     }
     
-    private func checkAndCreateDirectory(folder: String) {
+    private func checkAndCreateDirectory() {
         self.fileManager = FileManager.default
         self.cachedImagesFolderURL = self.fileManager
             .urls(for: .cachesDirectory, in: .userDomainMask)
-            .first?.appendingPathComponent(folder)
+            .first?.appendingPathComponent("cachedImages")
         
         do {
             if let url = self.cachedImagesFolderURL {
-                try? self.fileManager.createDirectory(at: url, withIntermediateDirectories: true, attributes: [:])
-            }
-        }
-    }
-    
-    // ИСПРАВИТЬ ЭТОТ ГОВНОКОД!
-    
-    private func pathAndFileName(url: URL) -> [String] {
-        var pathAndFileName = [String]()
-        var path = url.path
-        var name = url.path
-        if let i = path.lastIndex(of: "/") {
-            path.removeSubrange(i...)
-            path.remove(at: path.startIndex)
-            name.removeSubrange(name.startIndex...i)
-            pathAndFileName.append(path)
-            pathAndFileName.append(name)
-        }
-        return pathAndFileName
-    }
-    
-    private func addSubFolders(path: String) {
-        let url = self.cachedImagesFolderURL?.appendingPathComponent(path)
-        
-        do {
-            if let url = url {
                 try? self.fileManager.createDirectory(at: url, withIntermediateDirectories: true, attributes: [:])
             }
         }
@@ -73,14 +47,12 @@ class CacheManager: PokemonsCacheble {
     // MARK: Pokemons Cacheble Functions
     
     func addToCacheFolder(image: UIImage, url: URL) {
-        let pathAndName = self.pathAndFileName(url: url)
-        self.addSubFolders(path: pathAndName[0])
-        if let pngImage = image.pngData(),
+        if let percentURL = url.absoluteString
+            .addingPercentEncoding(withAllowedCharacters: .urlHostAllowed),
+           let pngImage = image.pngData(),
            let fileURL = self.cachedImagesFolderURL?
-            .appendingPathComponent(pathAndName[0])
-            .appendingPathComponent(pathAndName[1])
+            .appendingPathComponent(percentURL)
         {
-            
             do {
                 try pngImage.write(to: fileURL)
             } catch {
@@ -91,8 +63,8 @@ class CacheManager: PokemonsCacheble {
     
     func checkCache(url: URL) -> UIImage? {
         if let dataURL = self.cachedImagesFolderURL?
-            .appendingPathComponent(self.pathAndFileName(url: url)[0])
-            .appendingPathComponent(self.pathAndFileName(url: url)[1]),
+            .appendingPathComponent(url.absoluteString
+                                        .addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!),
            let imageData = try? Data(contentsOf: dataURL)
         {
             let image = UIImage(data: imageData)

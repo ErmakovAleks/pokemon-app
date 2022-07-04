@@ -71,7 +71,7 @@ class PokemonsListController: BaseViewController<PokemonsListView, PokemonsEvent
         self.pokemonsNames()
         
         self.rootView?.tableView?.addInfiniteScroll { (tableView) -> Void in
-            self.shownPokemons += self.pokemonsPortion
+            self.shownPokemons = self.pokemons.count
             self.pokemonsNames(offset: self.shownPokemons)
             tableView.finishInfiniteScroll()
         }
