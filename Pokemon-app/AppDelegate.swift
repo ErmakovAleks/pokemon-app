@@ -19,39 +19,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let window = UIWindow(frame: UIScreen.main.bounds)
         let innerProvider = NoriSessionPokemonRequester<UrlSessionService>()
         let cache = CacheManager()
-        let provider = DataProvider(innerProvider: innerProvider, cache: cache)
+        let coreDataManager = CoreDataManager()
+        let provider = DataProvider(innerProvider: innerProvider, cache: cache, coreData: coreDataManager)
         let coordinator = MainCoordinator(provider: provider)
         window.rootViewController = coordinator
         window.makeKeyAndVisible()
         self.window = window
         
         return true
-    }
-    
-    // MARK: -
-    // MARK: Core Data
-    
-    lazy var persistentContainer: NSPersistentContainer = {
-        let container = NSPersistentContainer(name: "PokemonDataModel")
-        container.loadPersistentStores(completionHandler: { (storeDescription, error) in
-            if let error = error as NSError? {
-                fatalError("Unresolved error \(error), \(error.userInfo)")
-            }
-        })
-        return container
-    }()
-    
-    func saveContext() {
-        let context = persistentContainer.viewContext
-        if context.hasChanges {
-            do {
-                try context.save()
-                print("Data is saved!")
-            } catch {
-                let error = error as NSError
-                fatalError("Unresolved error \(error), \(error.userInfo)")
-            }
-        }
     }
 }
 

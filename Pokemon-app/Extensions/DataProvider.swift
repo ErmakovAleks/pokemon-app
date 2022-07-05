@@ -18,76 +18,34 @@ class DataProvider: PokemonsDataProvider {
     var linkEntry: String = PokemonAPI.environment()
     var innerProvider: PokemonsDataProvider
     var cache: PokemonsCacheble
+    var coreData: PokemonsCoreDataProvider
     
     // MARK: -
     // MARK: Initializators
     
-    init(innerProvider: PokemonsDataProvider, cache: PokemonsCacheble) {
+    init(innerProvider: PokemonsDataProvider, cache: PokemonsCacheble, coreData: PokemonsCoreDataProvider) {
         self.innerProvider = innerProvider
         self.cache = cache
-    }
-    
-    // MARK: -
-    // MARK: Private functions
-    
-    private func saveToCoreData(array: [Pokemon]) {
-        print("WORK!")
-        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
-        let context = appDelegate.persistentContainer.viewContext
-        for pokemon in array {
-            guard let entity = NSEntityDescription.entity(forEntityName: "PokemonEntity", in: context) else { return }
-            let pokemonEntity = NSManagedObject(entity: entity, insertInto: context)
-            pokemonEntity.setValue(pokemon.name, forKey: "name")
-            pokemonEntity.setValue(pokemon.url.absoluteString, forKey: "url")
-            
-            do {
-                try context.save()
-            } catch let error as NSError {
-                print("Could not save. \(error), \(error.userInfo)")
-            }
-        }
-        let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: "PokemonEntity")
-        var temp: [NSManagedObject] = []
-        do {
-            temp = try! context.fetch(fetchRequest)
-            print("pokemons.count = \(temp.count)")
-        }
-    }
-    
-    private func fetchFromCoreData() -> [Pokemon] {
-        var pokemons: [Pokemon] = []
-        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return [] }
-        let context = appDelegate.persistentContainer.viewContext
-        let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: "PokemonEntity")
-        
-        do {
-            pokemons = try context.fetch(fetchRequest) as [Pokemon]
-            //print("pokemons.count = \(pokemons.count)")
-          } catch let error as NSError {
-            print("Could not fetch. \(error), \(error.userInfo)")
-          }
-        return pokemons
+        self.coreData = coreData
     }
     
     // MARK: -
     // MARK: PokemonsDataProvider Functions
     
     func list(limit: Int, offset: Int) -> Single<[Pokemon]> {
-        if limit + offset > self.fetchFromCoreData().count {
-            print("Дозагрузка")
+        if limit + offset > self.coreData.fetchFromCoreData().count {
             let pokemons = self.innerProvider.list(limit: limit, offset: offset)
-            pokemons.subscribe { [weak self] response in
-                print("CoreData!")
-                self?.saveToCoreData(array: response)
-            } onFailure: { error in
-                print(error)
-            }.dispose()
+            pokemons.subscribe(
+                onSuccess: { [weak self] response in
+                    self?.coreData.saveToCoreData(array: response)
+                }, onFailure: { _ in
+                    print("Incorrect response from server")
+                })
             return pokemons
         } else {
             return Single<[Pokemon]>.create { single in
-                let pokemons = self.fetchFromCoreData()
+                let pokemons = self.coreData.fetchFromCoreData()
                 single(.success(pokemons))
-                print("Pokemons from Core Data")
                 return Disposables.create()
             }
         }
@@ -100,12 +58,10 @@ class DataProvider: PokemonsDataProvider {
     
     func pokemonImage(url: URL, handler: @escaping ((UIImage?) -> Void)) {
         if let image = self.cache.checkCache(url: url) {
-            print("Cached!")
             handler(image)
         } else {
             DispatchQueue.global(qos: .background).async {
                 if let data = try? Data(contentsOf: url), let image = UIImage(data: data) {
-                    print("Downloaded!")
                     self.cache.addToCacheFolder(image: image, url: url)
                     handler(image)
                 } else { handler(nil) }
