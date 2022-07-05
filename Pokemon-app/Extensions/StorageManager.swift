@@ -8,18 +8,35 @@
 import Foundation
 import CoreData
 
-public class CoreDataManager: PokemonsCoreDataProvider {
+public class StorageManager: PokemonsStorageProvider {
     
     // MARK: -
     // MARK: Variables
     
     private lazy var context = persistentContainer.viewContext
+    private let fetchRequest = PokemonEntity.fetchRequest()
+    private let limit = 20
+    
+    // MARK: -
+    // MARK: Private functions
+    
+    private func configurePokemon(pokemonEntity: PokemonEntity) -> Pokemon? {
+        if
+            let name = pokemonEntity.name,
+            let stringUrl = pokemonEntity.url,
+            let url = URL(string: stringUrl)
+        {
+            return Pokemon(name: name, url: url)
+        } else {
+            return nil
+        }
+    }
     
     // MARK: -
     // MARK: PokemonsCoreDataProvider
     
     func saveToCoreData(array: [Pokemon]) {
-        for pokemon in array {
+        array.forEach { pokemon in
             let entity = PokemonEntity(context: context)
             entity.name = pokemon.name
             entity.url = pokemon.url.absoluteString
@@ -32,20 +49,13 @@ public class CoreDataManager: PokemonsCoreDataProvider {
         }
     }
     
-    func fetchFromCoreData() -> [Pokemon] {
+    func fetchAllFromCoreData() -> [Pokemon] {
         var pokemons: [Pokemon] = []
-        let fetchRequest = PokemonEntity.fetchRequest()
         
         do {
             let savedPokemons = try context.fetch(fetchRequest)
-            for pokemon in savedPokemons {
-                if
-                    let name = pokemon.name,
-                    let stringUrl = pokemon.url,
-                    let url = URL(string: stringUrl)
-                {
-                    pokemons.append(Pokemon(name: name, url: url))
-                }
+            savedPokemons.forEach { pokemon in
+                self.configurePokemon(pokemonEntity: pokemon).map { pokemons.append($0) }
             }
           } catch let error as NSError {
             print("Could not fetch. \(error), \(error.userInfo)")
@@ -53,6 +63,25 @@ public class CoreDataManager: PokemonsCoreDataProvider {
         return pokemons
     }
     
+    func fetchFromCoreData(offset: Int) -> [Pokemon] {
+        var pokemons: [Pokemon] = []
+
+        do {
+            let savedPokemons = try context.fetch(fetchRequest)
+            if savedPokemons.count >= offset + self.limit {
+                savedPokemons[offset...(offset + self.limit)].forEach { pokemon in
+                    self.configurePokemon(pokemonEntity: pokemon).map { pokemons.append($0) }
+                }
+            }
+        } catch let error as NSError {
+            print("Could not fetch. \(error), \(error.userInfo)")
+          }
+        return pokemons
+    }
+    
+    func count() -> Int? {
+        try? self.context.count(for: self.fetchRequest)
+    }
     
     // MARK: -
     // MARK: Core Data

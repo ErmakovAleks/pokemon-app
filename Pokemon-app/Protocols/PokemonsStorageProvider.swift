@@ -8,9 +8,13 @@
 import Foundation
 import CoreData
 
-protocol PokemonsCoreDataProvider {
+protocol PokemonsStorageProvider {
     
     func saveToCoreData(array: [Pokemon])
     
-    func fetchFromCoreData() -> [Pokemon]
+    func fetchAllFromCoreData() -> [Pokemon]
+    
+    func fetchFromCoreData(offset: Int) -> [Pokemon]
+    
+    func count() -> Int?
 }

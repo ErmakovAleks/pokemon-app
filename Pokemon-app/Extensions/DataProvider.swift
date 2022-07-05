@@ -18,33 +18,40 @@ class DataProvider: PokemonsDataProvider {
     var linkEntry: String = PokemonAPI.environment()
     var innerProvider: PokemonsDataProvider
     var cache: PokemonsCacheble
-    var coreData: PokemonsCoreDataProvider
+    var storage: PokemonsStorageProvider
     
     // MARK: -
     // MARK: Initializators
     
-    init(innerProvider: PokemonsDataProvider, cache: PokemonsCacheble, coreData: PokemonsCoreDataProvider) {
+    init(innerProvider: PokemonsDataProvider, cache: PokemonsCacheble, storage: PokemonsStorageProvider) {
         self.innerProvider = innerProvider
         self.cache = cache
-        self.coreData = coreData
+        self.storage = storage
+    }
+    
+    // MARK: -
+    // MARK: Private Functions
+    
+    private func single(from offset: Int) -> Single<[Pokemon]> {
+        return Single<[Pokemon]>.create { single in
+            let pokemons = self.storage.fetchFromCoreData(offset: offset)
+            single(.success(pokemons))
+            return Disposables.create()
+        }
     }
     
     // MARK: -
     // MARK: PokemonsDataProvider Functions
     
     func list(limit: Int, offset: Int) -> Single<[Pokemon]> {
-        if limit + offset > self.coreData.fetchFromCoreData().count {
+        if let count = self.storage.count(), offset >= count {
             let pokemons = self.innerProvider.list(limit: limit, offset: offset)
-            pokemons.subscribe(
-                onSuccess: { [weak self] response in
-                    self?.coreData.saveToCoreData(array: response)
-                }, onFailure: { _ in
-                    print("Incorrect response from server")
-                })
             return pokemons
+                .map { self.storage.saveToCoreData(array: $0) }
+                .flatMap { self.single(from: offset) }
         } else {
             return Single<[Pokemon]>.create { single in
-                let pokemons = self.coreData.fetchFromCoreData()
+                let pokemons = self.storage.fetchAllFromCoreData()
                 single(.success(pokemons))
                 return Disposables.create()
             }
