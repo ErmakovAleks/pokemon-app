@@ -15,7 +15,6 @@ public class StorageManager: PokemonsStorageProvider {
     
     private lazy var context = persistentContainer.viewContext
     private let fetchRequest = PokemonEntity.fetchRequest()
-    private let limit = 20
     
     // MARK: -
     // MARK: Private functions
@@ -49,27 +48,13 @@ public class StorageManager: PokemonsStorageProvider {
         }
     }
     
-    func fetchAllFromCoreData() -> [Pokemon] {
-        var pokemons: [Pokemon] = []
-        
-        do {
-            let savedPokemons = try context.fetch(fetchRequest)
-            savedPokemons.forEach { pokemon in
-                self.configurePokemon(pokemonEntity: pokemon).map { pokemons.append($0) }
-            }
-          } catch let error as NSError {
-            print("Could not fetch. \(error), \(error.userInfo)")
-          }
-        return pokemons
-    }
-    
-    func fetchFromCoreData(offset: Int) -> [Pokemon] {
+    func fetchFromCoreData(offset: Int, limit: Int = 20) -> [Pokemon] {
         var pokemons: [Pokemon] = []
 
         do {
             let savedPokemons = try context.fetch(fetchRequest)
-            if savedPokemons.count >= offset + self.limit {
-                savedPokemons[offset...(offset + self.limit)].forEach { pokemon in
+            if savedPokemons.count >= offset + limit {
+                savedPokemons[offset...(offset + limit)].forEach { pokemon in
                     self.configurePokemon(pokemonEntity: pokemon).map { pokemons.append($0) }
                 }
             }

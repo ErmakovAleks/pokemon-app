@@ -34,7 +34,7 @@ class DataProvider: PokemonsDataProvider {
     
     private func single(from offset: Int) -> Single<[Pokemon]> {
         return Single<[Pokemon]>.create { single in
-            let pokemons = self.storage.fetchFromCoreData(offset: offset)
+            let pokemons = self.storage.fetchFromCoreData(offset: offset, limit: 20)
             single(.success(pokemons))
             return Disposables.create()
         }
@@ -51,7 +51,7 @@ class DataProvider: PokemonsDataProvider {
                 .flatMap { self.single(from: offset) }
         } else {
             return Single<[Pokemon]>.create { single in
-                let pokemons = self.storage.fetchAllFromCoreData()
+                let pokemons = self.storage.fetchFromCoreData(offset: offset, limit: limit)
                 single(.success(pokemons))
                 return Disposables.create()
             }

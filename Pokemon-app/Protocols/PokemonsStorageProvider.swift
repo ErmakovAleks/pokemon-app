@@ -12,9 +12,7 @@ protocol PokemonsStorageProvider {
     
     func saveToCoreData(array: [Pokemon])
     
-    func fetchAllFromCoreData() -> [Pokemon]
-    
-    func fetchFromCoreData(offset: Int) -> [Pokemon]
+    func fetchFromCoreData(offset: Int, limit: Int) -> [Pokemon]
     
     func count() -> Int?
 }
