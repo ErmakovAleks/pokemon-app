@@ -5,7 +5,7 @@ import UIKit
 // MARK: -
 // MARK: Public class
 
-public class URLSessionPokemonsRequester: PokemonsDataProvider {
+public class URLSessionPokemonsRequester: PokemonsDataProvidable {
     
     // MARK: -
     // MARK: Variables

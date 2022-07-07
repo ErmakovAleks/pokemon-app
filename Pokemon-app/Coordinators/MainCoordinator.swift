@@ -6,12 +6,12 @@ class MainCoordinator: BaseCoordinator, PokemonsListDelegate {
     // MARK: -
     // MARK: Variables
     
-    let provider: PokemonsDataProvider
+    let provider: PokemonsDataProvidable
     
     // MARK: -
     // MARK: Initializators
     
-    init(provider: PokemonsDataProvider) {
+    init(provider: PokemonsDataProvidable) {
         self.provider = provider
         
         super.init(nibName: nil, bundle: nil)

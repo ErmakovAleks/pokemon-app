@@ -11,12 +11,12 @@ class PokemonDetailController: BaseViewController<PokemonDetailView, PokemonsEve
     private var image: UIImage?
     
     private let url: URL?
-    private let provider: PokemonsDataProvider
+    private let provider: PokemonsDataProvidable
     
     // MARK: -
     // MARK: Initializators
     
-    init(provider: PokemonsDataProvider, url: URL?){
+    init(provider: PokemonsDataProvidable, url: URL?){
         self.url = url
         self.provider = provider
         

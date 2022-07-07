@@ -8,7 +8,7 @@
 import Foundation
 import RxSwift
 
-class NoriSessionPokemonRequester<Service: DataSessionService>: PokemonsDataProvider {
+class NoriSessionPokemonRequester<Service: DataSessionService>: PokemonsDataProvidable {
     
     // MARK: -
     // MARK: Variables

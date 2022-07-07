@@ -23,12 +23,14 @@ enum PokemonAPI: String {
 
 enum Errors: Error {
     case notValidUrl
+    case recordingIsFailed
+    case fetchingIsFailed
 }
 
 // MARK: -
 // MARK: Provider Requirements Protocol
 
-protocol PokemonsDataProvider {
+protocol PokemonsDataProvidable {
     
     var linkEntry: String { get }
     
@@ -39,7 +41,7 @@ protocol PokemonsDataProvider {
     func pokemonImage(url: URL, handler: @escaping ((UIImage?) -> Void))
 }
 
-extension PokemonsDataProvider {
+extension PokemonsDataProvidable {
     
     func pokemonImage(url: URL, handler: @escaping ((UIImage?) -> Void)) {
         DispatchQueue.global(qos: .background).async {

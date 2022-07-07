@@ -8,7 +8,7 @@
 import Foundation
 import RxSwift
 
-class CacheManager: PokemonsCacheble {
+class CacheProvider: PokemonsCacheble {
     
     // MARK: -
     // MARK: Variables
