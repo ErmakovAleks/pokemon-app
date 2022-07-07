@@ -35,23 +35,52 @@ public class CoreDataPersistencePokemonProvider: PokemonsPersistenceProvidable {
         return pokemons
     }
     
+    private func configureDetails(details: [PokemonDetailsEntity]) -> PokemonDetails? {
+        if
+            let frontDefault = details.first?.sprites?.frontDefault,
+            let frontShiny = details.first?.sprites?.frontShiny,
+            let backDefault = details.first?.sprites?.backDefault,
+            let backShiny = details.first?.sprites?.backShiny,
+            let name = details.first?.name,
+            let first = details.first,
+            let height = Int(exactly: first.height),
+            let weight = Int(exactly: first.weight)
+        {
+            let sprites = Sprites(
+                backDefault: backDefault,
+                backShiny: backShiny,
+                frontDefault: frontDefault,
+                frontShiny: frontShiny
+            )
+            
+            return PokemonDetails(
+                height: height,
+                name: name,
+                sprites: sprites,
+                weight: weight
+            )
+        } else {
+            return nil
+        }
+    }
+    
     // MARK: -
     // MARK: PokemonsPersistenceProvidable
     
-    func savePokemonsToCoreData(array: [Pokemon], handler: @escaping PokemonsCardsCompletion) {
+    func save(array: [Pokemon], handler: @escaping PokemonsCardsCompletion) {
         array.forEach { pokemon in
             let entity = PokemonEntity(context: context)
             entity.name = pokemon.name
             entity.url = pokemon.url.absoluteString
         }
         if let _ = try? context.save() {
-            handler(.success(array))
+            handler(.success(print("")))
         } else {
             handler(.failure(Errors.recordingIsFailed))
         }
     }
     
-    func saveDetailsToCoreData(details: PokemonDetails, url: URL, handler: @escaping PokemonDetailCompletion) {
+    func save(details: PokemonDetails, url: URL, handler: @escaping PokemonDetailCompletion) {
         let entity = PokemonDetailsEntity(context: context)
         entity.name = details.name
         entity.url = url
@@ -64,13 +93,13 @@ public class CoreDataPersistencePokemonProvider: PokemonsPersistenceProvidable {
             entity.weight = Int16(weight)
         }
         if let _ = try? context.save() {
-            handler(.success(details))
+            handler(.success(print("")))
         } else {
             handler(.failure(Errors.recordingIsFailed))
         }
     }
     
-    func fetchPokemons(offset: Int, limit: Int = 20) -> PokemonsResult {
+    func pokemons(offset: Int, limit: Int = 20) -> PokemonsResult {
         self.fetchPokemonsRequest.fetchOffset = offset
         self.fetchPokemonsRequest.fetchLimit = limit
         
@@ -84,8 +113,15 @@ public class CoreDataPersistencePokemonProvider: PokemonsPersistenceProvidable {
         }
     }
     
-    func fetchDetails(for url: URL) -> DetailsResult {
-        <#code#>
+    func details(for url: URL) -> DetailsResult {
+        self.fetchDetailsRequest.predicate = NSPredicate(format: "url == %@", url.absoluteString)
+        if let savedDetails = try? self.context.fetch(self.fetchDetailsRequest),
+           let details = self.configureDetails(details: savedDetails)
+        {
+            return DetailsResult.success(details)
+        } else {
+            return DetailsResult.failure(Errors.fetchingIsFailed)
+        }
     }
     
     func count() -> Int? {
@@ -95,11 +131,8 @@ public class CoreDataPersistencePokemonProvider: PokemonsPersistenceProvidable {
     func containsPokemon(for url: URL) -> Bool {
         self.fetchDetailsRequest.predicate = NSPredicate(format: "url == %@", url.absoluteString)
         let objects = try? self.context.fetch(self.fetchDetailsRequest)
-        if let objects = objects {
-            return !objects.isEmpty
-        } else {
-            return false
-        }
+        let notContains =  objects?.isEmpty == true
+        return !notContains
     }
     
     // MARK: -

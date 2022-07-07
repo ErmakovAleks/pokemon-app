@@ -10,13 +10,13 @@ import CoreData
 
 protocol PokemonsPersistenceProvidable {
     
-    func savePokemonsToCoreData(array: [Pokemon], handler: @escaping PokemonsCardsCompletion)
+    func save(array: [Pokemon], handler: @escaping PokemonsCardsCompletion)
     
-    func saveDetailsToCoreData(details: PokemonDetails, url: URL, handler: @escaping PokemonDetailCompletion)
+    func save(details: PokemonDetails, url: URL, handler: @escaping PokemonDetailCompletion)
     
-    func fetchPokemons(offset: Int, limit: Int) -> PokemonsResult
+    func pokemons(offset: Int, limit: Int) -> PokemonsResult
     
-    func fetchDetails(for url: URL) -> DetailsResult
+    func details(for url: URL) -> DetailsResult
     
     func containsPokemon(for url: URL) -> Bool
     

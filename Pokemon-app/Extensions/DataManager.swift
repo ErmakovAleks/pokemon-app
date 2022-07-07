@@ -34,7 +34,7 @@ class DataManager: PokemonsDataProvidable {
     
     private func singlePokemons(from offset: Int, limit: Int) -> Single<[Pokemon]> {
         return Single<[Pokemon]>.create { single in
-            let pokemons = self.storage.fetchPokemons(offset: offset, limit: 20)
+            let pokemons = self.storage.pokemons(offset: offset, limit: 20)
             switch pokemons {
             case .success(let result):
                 single(.success(result))
@@ -47,7 +47,7 @@ class DataManager: PokemonsDataProvidable {
     
     private func singleDetails(for url: URL) -> Single<PokemonDetails> {
         return Single<PokemonDetails>.create { single in
-            let details = self.storage.fetchDetails(for: url)
+            let details = self.storage.details(for: url)
             switch details {
             case .success(let result):
                 single(.success(result))
@@ -65,7 +65,7 @@ class DataManager: PokemonsDataProvidable {
         if let count = self.storage.count(), offset >= count {
             let pokemons = self.innerProvider.list(limit: limit, offset: offset)
             
-            return pokemons.map { self.storage.savePokemonsToCoreData(array: $0) { poks in
+            return pokemons.map { self.storage.save(array: $0) { poks in
                 switch poks {
                 case .success:
                     break
@@ -84,7 +84,7 @@ class DataManager: PokemonsDataProvidable {
         } else {
             let details = self.innerProvider.details(url: url)
             
-            return details.map { self.storage.saveDetailsToCoreData(details: $0, url: url) { detail in
+            return details.map { self.storage.save(details: $0, url: url) { detail in
                 switch detail {
                 case .success:
                     break
