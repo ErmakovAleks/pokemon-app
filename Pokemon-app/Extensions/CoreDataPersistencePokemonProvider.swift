@@ -74,7 +74,7 @@ public class CoreDataPersistencePokemonProvider: PokemonsPersistenceProvidable {
             entity.url = pokemon.url.absoluteString
         }
         if let _ = try? context.save() {
-            handler(.success(print("")))
+            handler(.success(()))
         } else {
             handler(.failure(Errors.recordingIsFailed))
         }
@@ -93,7 +93,7 @@ public class CoreDataPersistencePokemonProvider: PokemonsPersistenceProvidable {
             entity.weight = Int16(weight)
         }
         if let _ = try? context.save() {
-            handler(.success(print("")))
+            handler(.success(()))
         } else {
             handler(.failure(Errors.recordingIsFailed))
         }
